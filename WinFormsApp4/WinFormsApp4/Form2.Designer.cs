@@ -73,17 +73,18 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 15F);
-            label3.Location = new Point(12, 274);
+            label3.Location = new Point(12, 290);
             label3.Name = "label3";
             label3.Size = new Size(344, 28);
             label3.TabIndex = 5;
             label3.Text = "Разработчик: Ткачук Фёдор АВТ-314";
+            label3.Click += label3_Click;
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 15F);
-            label4.Location = new Point(12, 302);
+            label4.Location = new Point(12, 318);
             label4.Name = "label4";
             label4.Size = new Size(155, 28);
             label4.TabIndex = 6;

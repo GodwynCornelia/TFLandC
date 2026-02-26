@@ -7,14 +7,27 @@ namespace WinFormsApp4
 
         private string filePath = "";
         private bool changed = false;
+
         public Form1()
         {
             InitializeComponent();
 
 
             this.Text = "Новый документ — Редактор";
-            richTextBox1.TextChanged += (s, e) => changed = true;
+            richTextBox1.Visible = false;
+
         }
+
+        private void ShowEditor()
+        {
+            if (!richTextBox1.Visible)
+            {
+                richTextBox1.Visible = true;
+                dataGridView1.Visible = true;
+            }
+        }
+
+        //вспомогательные методы для работы с файлом
         #region 
         private void Save()
         {
@@ -53,12 +66,19 @@ namespace WinFormsApp4
             }
             base.OnFormClosing(e);
         }
-        #endregion
+        #endregion 
 
+        //реализация кнопок работы с файлами
         #region 
         private void создатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Confirm()) { richTextBox1.Clear(); filePath = ""; changed = false; }
+            if (Confirm())
+            {
+                richTextBox1.Clear();
+                filePath = "";
+                changed = false;
+                ShowEditor();
+            }
         }
 
         private void открытьToolStripMenuItem_Click(object sender, EventArgs e)
@@ -71,6 +91,7 @@ namespace WinFormsApp4
                     richTextBox1.Text = File.ReadAllText(ofd.FileName);
                     filePath = ofd.FileName;
                     changed = false;
+                    ShowEditor();
                 }
             }
         }
@@ -114,26 +135,71 @@ namespace WinFormsApp4
             сохранитьToolStripMenuItem_Click(sender, e);
         }
         #endregion
-        private void списокЛитераторыToolStripMenuItem_Click(object sender, EventArgs e)
-        {
 
+        //работа с разделом правки
+        #region
+
+        private void отменитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (richTextBox1.CanUndo) richTextBox1.Undo();//?????????????????? некорректно работает
         }
 
-        private void исходныйКодлToolStripMenuItem_Click(object sender, EventArgs e)
+        private void вернутьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (richTextBox1.CanRedo) richTextBox1.Redo();
         }
 
+        private void вырезатьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (richTextBox1.SelectionLength > 0) richTextBox1.Cut();
+        }
+
+        private void копироватьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (richTextBox1.SelectionLength > 0) richTextBox1.Copy();
+        }
+
+        private void вставитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Clipboard.ContainsText()) richTextBox1.Paste();
+        }
+
+        private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.SelectedText = "";
+        }
+
+        private void выделитьВсToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.SelectAll();
+        }
+
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+            отменитьToolStripMenuItem_Click(sender, e);
+        }
+
+        private void toolStripButton5_Click(object sender, EventArgs e)
+        {
+            вернутьToolStripMenuItem_Click(sender, e);
+        }
         private void toolStripButton6_Click(object sender, EventArgs e)
         {
-
+            вставитьToolStripMenuItem_Click(sender, e);//???????????????????????????????????????? разобраться что конкретно требуется
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void toolStripButton7_Click(object sender, EventArgs e)
         {
-
+            вырезатьToolStripMenuItem_Click(sender, e);
         }
 
+        private void toolStripButton8_Click(object sender, EventArgs e)
+        {
+            вставитьToolStripMenuItem_Click(sender, e);
+        }
+        #endregion
+        //вывод справочных окон
+        #region
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form2 aboutForm = new Form2();
@@ -155,14 +221,31 @@ namespace WinFormsApp4
         {
             вызовСправкиToolStripMenuItem_Click(sender, e);
         }
+        #endregion
 
 
-
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        private void списокЛитераторыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+
         }
 
-       
+        private void исходныйКодлToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

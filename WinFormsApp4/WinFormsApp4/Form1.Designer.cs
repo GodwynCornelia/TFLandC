@@ -142,42 +142,49 @@
             отменитьToolStripMenuItem.Name = "отменитьToolStripMenuItem";
             отменитьToolStripMenuItem.Size = new Size(148, 22);
             отменитьToolStripMenuItem.Text = "Отменить";
+            отменитьToolStripMenuItem.Click += отменитьToolStripMenuItem_Click;
             // 
             // вернутьToolStripMenuItem
             // 
             вернутьToolStripMenuItem.Name = "вернутьToolStripMenuItem";
             вернутьToolStripMenuItem.Size = new Size(148, 22);
             вернутьToolStripMenuItem.Text = "Вернуть";
+            вернутьToolStripMenuItem.Click += вернутьToolStripMenuItem_Click;
             // 
             // вырезатьToolStripMenuItem
             // 
             вырезатьToolStripMenuItem.Name = "вырезатьToolStripMenuItem";
             вырезатьToolStripMenuItem.Size = new Size(148, 22);
             вырезатьToolStripMenuItem.Text = "Вырезать";
+            вырезатьToolStripMenuItem.Click += вырезатьToolStripMenuItem_Click;
             // 
             // копироватьToolStripMenuItem
             // 
             копироватьToolStripMenuItem.Name = "копироватьToolStripMenuItem";
             копироватьToolStripMenuItem.Size = new Size(148, 22);
             копироватьToolStripMenuItem.Text = "Копировать";
+            копироватьToolStripMenuItem.Click += копироватьToolStripMenuItem_Click;
             // 
             // вставитьToolStripMenuItem
             // 
             вставитьToolStripMenuItem.Name = "вставитьToolStripMenuItem";
             вставитьToolStripMenuItem.Size = new Size(148, 22);
             вставитьToolStripMenuItem.Text = "Вставить";
+            вставитьToolStripMenuItem.Click += вставитьToolStripMenuItem_Click;
             // 
             // удалитьToolStripMenuItem
             // 
             удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
             удалитьToolStripMenuItem.Size = new Size(148, 22);
             удалитьToolStripMenuItem.Text = "Удалить";
+            удалитьToolStripMenuItem.Click += удалитьToolStripMenuItem_Click;
             // 
             // выделитьВсToolStripMenuItem
             // 
             выделитьВсToolStripMenuItem.Name = "выделитьВсToolStripMenuItem";
             выделитьВсToolStripMenuItem.Size = new Size(148, 22);
             выделитьВсToolStripMenuItem.Text = "Выделить всё";
+            выделитьВсToolStripMenuItem.Click += выделитьВсToolStripMenuItem_Click;
             // 
             // текстToolStripMenuItem
             // 
@@ -355,6 +362,7 @@
             toolStripButton4.Size = new Size(36, 36);
             toolStripButton4.Text = "toolStripButton4";
             toolStripButton4.ToolTipText = "Отменить";
+            toolStripButton4.Click += toolStripButton4_Click;
             // 
             // toolStripButton5
             // 
@@ -365,6 +373,7 @@
             toolStripButton5.Size = new Size(36, 36);
             toolStripButton5.Text = "toolStripButton5";
             toolStripButton5.ToolTipText = "Вернуть";
+            toolStripButton5.Click += toolStripButton5_Click;
             // 
             // toolStripButton6
             // 
@@ -386,6 +395,7 @@
             toolStripButton7.Size = new Size(36, 36);
             toolStripButton7.Text = "toolStripButton7";
             toolStripButton7.ToolTipText = "Вырезать";
+            toolStripButton7.Click += toolStripButton7_Click;
             // 
             // toolStripButton8
             // 
@@ -396,6 +406,7 @@
             toolStripButton8.Size = new Size(36, 36);
             toolStripButton8.Text = "toolStripButton8";
             toolStripButton8.ToolTipText = "Вставить ";
+            toolStripButton8.Click += toolStripButton8_Click;
             // 
             // toolStripButton9
             // 
@@ -442,6 +453,7 @@
             MinimumSize = new Size(800, 500);
             Name = "Form1";
             Text = "Form1";
+            Load += Form1_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
