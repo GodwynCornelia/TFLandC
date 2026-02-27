@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "uRCl8WIxt9hGNxODLBNqPxePFy07D4uXf3VGkvmINcmcRcTZ/mnvNihg0bnyZ4Ny51sZZND2M5scdCYKHx/feg==",
+  "dgSpecHash": "sUNTs6U5zI7jaY+1FdgbKAOdBexXOAOpWhiIqvMlDkQXs6jTGYv5FwszovMJbAtYdnG+tJVNsGDFXjzZAKc+zw==",
   "success": true,
   "projectFilePath": "C:\\Users\\wasa\\Downloads\\TFLandC\\WinFormsApp4\\WinFormsApp4\\WinFormsApp4.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\wasa\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.0\\microsoft.net.illink.tasks.8.0.0.nupkg.sha512",
+    "C:\\Users\\wasa\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\8.0.0\\microsoft.netcore.app.runtime.win-x64.8.0.0.nupkg.sha512",
+    "C:\\Users\\wasa\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\8.0.0\\microsoft.windowsdesktop.app.runtime.win-x64.8.0.0.nupkg.sha512",
+    "C:\\Users\\wasa\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\8.0.0\\microsoft.aspnetcore.app.runtime.win-x64.8.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

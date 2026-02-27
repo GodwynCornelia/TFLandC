@@ -81,6 +81,7 @@
             richTextBox1.Size = new Size(284, 339);
             richTextBox1.TabIndex = 1;
             richTextBox1.Text = "";
+            richTextBox1.TextChanged += richTextBox1_TextChanged;
             // 
             // treeView1
             // 
