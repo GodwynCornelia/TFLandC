@@ -1,4 +1,5 @@
 using System.Threading.Channels;
+using System.Collections.Generic;
 
 namespace WinFormsApp4
 {
@@ -8,6 +9,10 @@ namespace WinFormsApp4
         private string filePath = "";
         private bool changed = false;
 
+        private Stack<string> undoStack = new Stack<string>();
+        private Stack<string> redoStack = new Stack<string>();
+        private bool isOperating = false;
+
         public Form1()
         {
             InitializeComponent();
@@ -15,6 +20,8 @@ namespace WinFormsApp4
 
             this.Text = "Новый документ — Редактор";
             richTextBox1.Visible = false;
+
+            undoStack.Push("");
 
         }
 
@@ -138,15 +145,50 @@ namespace WinFormsApp4
 
         //работа с разделом правки
         #region
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            changed = true;
 
+            if (!isOperating)
+            {
+                if (redoStack.Count > 0) redoStack.Clear();
+                if (undoStack.Count == 0 || richTextBox1.Text != undoStack.Peek())
+                {
+                    undoStack.Push(richTextBox1.Text);
+                }
+            }
+        }
         private void отменитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (richTextBox1.CanUndo) richTextBox1.Undo();//?????????????????? некорректно работает
+            if (undoStack.Count > 1)
+            {
+                isOperating = true;
+                redoStack.Push(undoStack.Pop());
+
+                richTextBox1.Text = undoStack.Peek();
+
+                richTextBox1.SelectionStart = richTextBox1.Text.Length;
+
+                isOperating = false;
+            }
         }
+
 
         private void вернутьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (richTextBox1.CanRedo) richTextBox1.Redo();
+            if (redoStack.Count > 0)
+            {
+                isOperating = true;
+
+                string state = redoStack.Pop();
+                undoStack.Push(state);
+
+                richTextBox1.Text = state;
+
+                richTextBox1.SelectionStart = richTextBox1.Text.Length;
+
+                isOperating = false;
+            }
         }
 
         private void вырезатьToolStripMenuItem_Click(object sender, EventArgs e)
@@ -185,7 +227,7 @@ namespace WinFormsApp4
         }
         private void toolStripButton6_Click(object sender, EventArgs e)
         {
-            вставитьToolStripMenuItem_Click(sender, e);//???????????????????????????????????????? разобраться что конкретно требуется
+            копироватьToolStripMenuItem_Click(sender, e);
         }
 
         private void toolStripButton7_Click(object sender, EventArgs e)
@@ -238,11 +280,6 @@ namespace WinFormsApp4
         {
 
         }
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void Form1_Load(object sender, EventArgs e)
         {
 
