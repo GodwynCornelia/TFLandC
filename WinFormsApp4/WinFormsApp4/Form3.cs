@@ -15,12 +15,12 @@ namespace WinFormsApp4
 
         private void Form3_Load(object sender, EventArgs e)
         {
-            richTextBox1.ReadOnly = true;    
-            richTextBox1.DetectUrls = true;    
+            richTextBox1.ReadOnly = true;
+            richTextBox1.DetectUrls = true;
 
 
             richTextBox1.Text = "Статус проекта: В разработке..." + Environment.NewLine +
-                                "Документация README: https://github.com/GodwynCornelia/TFLandC/blob/main/README.md";
+                                "Документация README: https://github.com/GodwynCornelia/TFLandC/blob/main/README.md";//в последующем будет нормальная реализация
 
 
             richTextBox1.LinkClicked -= richTextBox1_LinkClicked;
@@ -31,7 +31,6 @@ namespace WinFormsApp4
         {
             try
             {
-                // Открываем ссылку в браузере
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = e.LinkText,
@@ -49,6 +48,11 @@ namespace WinFormsApp4
 
         }
         private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form3_Load_1(object sender, EventArgs e)
         {
 
         }

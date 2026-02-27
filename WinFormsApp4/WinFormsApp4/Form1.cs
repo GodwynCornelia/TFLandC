@@ -30,7 +30,6 @@ namespace WinFormsApp4
             if (!richTextBox1.Visible)
             {
                 richTextBox1.Visible = true;
-                dataGridView1.Visible = true;
             }
         }
 
