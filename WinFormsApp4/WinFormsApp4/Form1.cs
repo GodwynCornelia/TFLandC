@@ -13,6 +13,8 @@ namespace WinFormsApp4
         private Stack<string> redoStack = new Stack<string>();
         private bool isOperating = false;
 
+        private List<Token> lastAnalysisResults = new List<Token>();
+
         public Form1()
         {
             InitializeComponent();
@@ -277,11 +279,45 @@ namespace WinFormsApp4
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex >= 0 && dataGridView1.Rows[e.RowIndex].Tag is Token token)
+            {
 
+                int charIndex = richTextBox1.GetFirstCharIndexFromLine(token.Line - 1) + token.StartPos;
+
+                richTextBox1.Focus();
+                richTextBox1.Select(charIndex, token.EndPos - token.StartPos);
+            }
         }
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void toolStripButton9_Click(object sender, EventArgs e)
+        {
+            ïóñêToolStripMenuItem_Click(sender, e);
+        }
+
+        private void ïóñêToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Scanner scanner = new Scanner();
+            lastAnalysisResults = scanner.Analyze(richTextBox1.Text);
+
+            dataGridView1.Rows.Clear();
+            foreach (var t in lastAnalysisResults)
+            {
+                int rowIdx = dataGridView1.Rows.Add(t.Code, t.Type, t.Lexeme, $"Ë:{t.Line} Ï:{t.StartPos}-{t.EndPos}");
+
+                dataGridView1.Rows[rowIdx].Tag = t;
+
+                if (t.Code == 99)
+                    dataGridView1.Rows[rowIdx].DefaultCellStyle.BackColor = Color.MistyRose;
+            }
         }
     }
 }

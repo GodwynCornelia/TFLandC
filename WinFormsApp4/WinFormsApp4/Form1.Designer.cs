@@ -57,10 +57,10 @@
             вызовСправкиToolStripMenuItem = new ToolStripMenuItem();
             оПрограммеToolStripMenuItem = new ToolStripMenuItem();
             dataGridView1 = new DataGridView();
-            Column1 = new DataGridViewTextBoxColumn();
-            Column2 = new DataGridViewTextBoxColumn();
-            Column3 = new DataGridViewTextBoxColumn();
-            Column4 = new DataGridViewTextBoxColumn();
+            ColumnCode = new DataGridViewTextBoxColumn();
+            ColumnType = new DataGridViewTextBoxColumn();
+            ColumnLexeme = new DataGridViewTextBoxColumn();
+            ColumnPos = new DataGridViewTextBoxColumn();
             richTextBox1 = new RichTextBox();
             toolStrip1 = new ToolStrip();
             toolStripButton1 = new ToolStripButton();
@@ -92,6 +92,7 @@
             menuStrip1.Size = new Size(800, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
+            menuStrip1.ItemClicked += menuStrip1_ItemClicked;
             // 
             // файлToolStripMenuItem
             // 
@@ -247,6 +248,7 @@
             пускToolStripMenuItem.Name = "пускToolStripMenuItem";
             пускToolStripMenuItem.Size = new Size(46, 20);
             пускToolStripMenuItem.Text = "Пуск";
+            пускToolStripMenuItem.Click += пускToolStripMenuItem_Click;
             // 
             // справкаToolStripMenuItem
             // 
@@ -271,40 +273,42 @@
             // 
             // dataGridView1
             // 
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4 });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ColumnCode, ColumnType, ColumnLexeme, ColumnPos });
             dataGridView1.Dock = DockStyle.Fill;
             dataGridView1.Location = new Point(0, 0);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
+            dataGridView1.RowHeadersVisible = false;
             dataGridView1.Size = new Size(800, 195);
             dataGridView1.TabIndex = 1;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             // 
-            // Column1
+            // ColumnCode
             // 
-            Column1.HeaderText = "Код";
-            Column1.Name = "Column1";
-            Column1.ReadOnly = true;
+            ColumnCode.HeaderText = "Код";
+            ColumnCode.Name = "ColumnCode";
+            ColumnCode.ReadOnly = true;
             // 
-            // Column2
+            // ColumnType
             // 
-            Column2.HeaderText = "Тип";
-            Column2.Name = "Column2";
-            Column2.ReadOnly = true;
+            ColumnType.HeaderText = "Тип";
+            ColumnType.Name = "ColumnType";
+            ColumnType.ReadOnly = true;
             // 
-            // Column3
+            // ColumnLexeme
             // 
-            Column3.HeaderText = "Лексема";
-            Column3.Name = "Column3";
-            Column3.ReadOnly = true;
+            ColumnLexeme.HeaderText = "Лексема";
+            ColumnLexeme.Name = "ColumnLexeme";
+            ColumnLexeme.ReadOnly = true;
             // 
-            // Column4
+            // ColumnPos
             // 
-            Column4.HeaderText = "Местоположение";
-            Column4.Name = "Column4";
-            Column4.ReadOnly = true;
-            Column4.Width = 120;
+            ColumnPos.HeaderText = "Местоположение";
+            ColumnPos.Name = "ColumnPos";
+            ColumnPos.ReadOnly = true;
             // 
             // richTextBox1
             // 
@@ -424,6 +428,7 @@
             toolStripButton9.Size = new Size(36, 36);
             toolStripButton9.Text = "toolStripButton9";
             toolStripButton9.ToolTipText = "Запуск";
+            toolStripButton9.Click += toolStripButton9_Click;
             // 
             // toolStripButton10
             // 
@@ -538,10 +543,10 @@
         private ToolStripButton toolStripButton9;
         private ToolStripButton toolStripButton10;
         private ToolStripButton toolStripButton11;
-        private DataGridViewTextBoxColumn Column1;
-        private DataGridViewTextBoxColumn Column2;
-        private DataGridViewTextBoxColumn Column3;
-        private DataGridViewTextBoxColumn Column4;
         private SplitContainer splitContainer1;
+        private DataGridViewTextBoxColumn ColumnCode;
+        private DataGridViewTextBoxColumn ColumnType;
+        private DataGridViewTextBoxColumn ColumnLexeme;
+        private DataGridViewTextBoxColumn ColumnPos;
     }
 }
