@@ -165,5 +165,5 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 ### 2. Строка с незакрытой ковычкой
 ![](READMEpicture/Снимок_экрана_2026-03-16_112129.png)
 
-### 3. Многострочный пример
-![](READMEpicture/Снимок_экрана_2026-03-16_112201.png)
+### 3. Строка состоящая из букв/цифр/других символов
+![](READMEpicture/Снимок_экрана_2026-03-16_114723.png)
