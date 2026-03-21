@@ -48,8 +48,6 @@ namespace WinFormsApp4
 
                     if (word == "const")
                         tokens.Add(new Token { Code = 1, Type = "Ключевое слово (const)", Lexeme = word, Line = line, StartPos = startI - lineStart, EndPos = i - lineStart });
-                    else if (word == "str")
-                        tokens.Add(new Token { Code = 3, Type = "Тип данных (str)", Lexeme = word, Line = line, StartPos = startI - lineStart, EndPos = i - lineStart });
                     else
                         tokens.Add(new Token { Code = 2, Type = "Идентификатор (ID)", Lexeme = word, Line = line, StartPos = startI - lineStart, EndPos = i - lineStart });
                     continue;

@@ -75,6 +75,14 @@
             toolStripButton10 = new ToolStripButton();
             toolStripButton11 = new ToolStripButton();
             splitContainer1 = new SplitContainer();
+            dgvErrors = new DataGridView();
+            dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn6 = new DataGridViewTextBoxColumn();
+            lblErrCount = new Label();
+            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             toolStrip1.SuspendLayout();
@@ -82,6 +90,7 @@
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvErrors).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -104,35 +113,35 @@
             // создатьToolStripMenuItem
             // 
             создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
-            создатьToolStripMenuItem.Size = new Size(154, 22);
+            создатьToolStripMenuItem.Size = new Size(153, 22);
             создатьToolStripMenuItem.Text = "Создать";
             создатьToolStripMenuItem.Click += создатьToolStripMenuItem_Click;
             // 
             // открытьToolStripMenuItem
             // 
             открытьToolStripMenuItem.Name = "открытьToolStripMenuItem";
-            открытьToolStripMenuItem.Size = new Size(154, 22);
+            открытьToolStripMenuItem.Size = new Size(153, 22);
             открытьToolStripMenuItem.Text = "Открыть";
             открытьToolStripMenuItem.Click += открытьToolStripMenuItem_Click;
             // 
             // сохранитьToolStripMenuItem
             // 
             сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
-            сохранитьToolStripMenuItem.Size = new Size(154, 22);
+            сохранитьToolStripMenuItem.Size = new Size(153, 22);
             сохранитьToolStripMenuItem.Text = "Сохранить";
             сохранитьToolStripMenuItem.Click += сохранитьToolStripMenuItem_Click;
             // 
             // сохранитьКакToolStripMenuItem
             // 
             сохранитьКакToolStripMenuItem.Name = "сохранитьКакToolStripMenuItem";
-            сохранитьКакToolStripMenuItem.Size = new Size(154, 22);
+            сохранитьКакToolStripMenuItem.Size = new Size(153, 22);
             сохранитьКакToolStripMenuItem.Text = "Сохранить как";
             сохранитьКакToolStripMenuItem.Click += сохранитьКакToolStripMenuItem_Click;
             // 
             // выходToolStripMenuItem
             // 
             выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            выходToolStripMenuItem.Size = new Size(154, 22);
+            выходToolStripMenuItem.Size = new Size(153, 22);
             выходToolStripMenuItem.Text = "Выход";
             выходToolStripMenuItem.Click += выходToolStripMenuItem_Click;
             // 
@@ -196,7 +205,7 @@
             // 
             текстToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { постановкаЗадачиToolStripMenuItem, грамматикаToolStripMenuItem, классификацияГрамматикиToolStripMenuItem, методАнализаToolStripMenuItem, тестовыйПримерToolStripMenuItem, списокЛитераторыToolStripMenuItem, исходныйКодлToolStripMenuItem });
             текстToolStripMenuItem.Name = "текстToolStripMenuItem";
-            текстToolStripMenuItem.Size = new Size(48, 20);
+            текстToolStripMenuItem.Size = new Size(49, 20);
             текстToolStripMenuItem.Text = "Текст";
             // 
             // постановкаЗадачиToolStripMenuItem
@@ -277,14 +286,13 @@
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ColumnCode, ColumnType, ColumnLexeme, ColumnPos });
-            dataGridView1.Dock = DockStyle.Fill;
+            dataGridView1.Dock = DockStyle.Top;
             dataGridView1.Location = new Point(0, 0);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
-            dataGridView1.Size = new Size(800, 195);
-            dataGridView1.TabIndex = 1;
-            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            dataGridView1.Size = new Size(800, 120);
+            dataGridView1.TabIndex = 2;
             // 
             // ColumnCode
             // 
@@ -316,7 +324,7 @@
             richTextBox1.Dock = DockStyle.Fill;
             richTextBox1.Location = new Point(0, 0);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(800, 199);
+            richTextBox1.Size = new Size(800, 164);
             richTextBox1.TabIndex = 2;
             richTextBox1.Text = "";
             richTextBox1.TextChanged += richTextBox1_TextChanged;
@@ -469,10 +477,73 @@
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(dgvErrors);
+            splitContainer1.Panel2.Controls.Add(lblErrCount);
             splitContainer1.Panel2.Controls.Add(dataGridView1);
             splitContainer1.Size = new Size(800, 398);
-            splitContainer1.SplitterDistance = 199;
+            splitContainer1.SplitterDistance = 164;
             splitContainer1.TabIndex = 4;
+            // 
+            // dgvErrors
+            // 
+            dgvErrors.AllowUserToAddRows = false;
+            dgvErrors.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvErrors.BackgroundColor = Color.White;
+            dgvErrors.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvErrors.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn6 });
+            dgvErrors.Dock = DockStyle.Fill;
+            dgvErrors.Location = new Point(0, 145);
+            dgvErrors.Name = "dgvErrors";
+            dgvErrors.ReadOnly = true;
+            dgvErrors.RowHeadersVisible = false;
+            dgvErrors.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvErrors.Size = new Size(800, 85);
+            dgvErrors.TabIndex = 0;
+            dgvErrors.CellClick += dgvErrors_CellClick;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            dataGridViewTextBoxColumn4.HeaderText = "Неверный фрагмент";
+            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            dataGridViewTextBoxColumn4.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            dataGridViewTextBoxColumn5.HeaderText = "Местоположение";
+            dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            dataGridViewTextBoxColumn5.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn6
+            // 
+            dataGridViewTextBoxColumn6.HeaderText = "Описание ошибки";
+            dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
+            dataGridViewTextBoxColumn6.ReadOnly = true;
+            // 
+            // lblErrCount
+            // 
+            lblErrCount.Dock = DockStyle.Top;
+            lblErrCount.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblErrCount.Location = new Point(0, 120);
+            lblErrCount.Name = "lblErrCount";
+            lblErrCount.Size = new Size(800, 25);
+            lblErrCount.TabIndex = 1;
+            lblErrCount.Text = "Ошибки синтаксического анализа:";
+            lblErrCount.TextAlign = ContentAlignment.BottomLeft;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            dataGridViewTextBoxColumn1.HeaderText = "Неверный фрагмент";
+            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            dataGridViewTextBoxColumn2.HeaderText = "Местоположение";
+            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            dataGridViewTextBoxColumn3.HeaderText = "Описание ошибки";
+            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             // 
             // Form1
             // 
@@ -496,6 +567,7 @@
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvErrors).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -530,6 +602,8 @@
         private ToolStripMenuItem вызовСправкиToolStripMenuItem;
         private ToolStripMenuItem оПрограммеToolStripMenuItem;
         private DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgvErrors;
+        private System.Windows.Forms.Label lblErrCount;
         private RichTextBox richTextBox1;
         private ToolStrip toolStrip1;
         private ToolStripButton toolStripButton1;
@@ -548,5 +622,11 @@
         private DataGridViewTextBoxColumn ColumnType;
         private DataGridViewTextBoxColumn ColumnLexeme;
         private DataGridViewTextBoxColumn ColumnPos;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
     }
 }

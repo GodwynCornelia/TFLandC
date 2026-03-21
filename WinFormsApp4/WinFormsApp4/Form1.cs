@@ -307,16 +307,45 @@ namespace WinFormsApp4
         {
             Scanner scanner = new Scanner();
             lastAnalysisResults = scanner.Analyze(richTextBox1.Text);
-
             dataGridView1.Rows.Clear();
             foreach (var t in lastAnalysisResults)
             {
-                int rowIdx = dataGridView1.Rows.Add(t.Code, t.Type, t.Lexeme, $"Л:{t.Line} П:{t.StartPos}-{t.EndPos}");
-
+                int rowIdx = dataGridView1.Rows.Add(t.Code, t.Type, t.Lexeme, $"Л:{t.Line} П:{t.StartPos}");
                 dataGridView1.Rows[rowIdx].Tag = t;
 
                 if (t.Code == 99)
                     dataGridView1.Rows[rowIdx].DefaultCellStyle.BackColor = Color.MistyRose;
+            }
+
+            Parser parser = new Parser(lastAnalysisResults);
+            parser.Parse();
+
+            dgvErrors.Rows.Clear();
+            lblErrCount.Text = $"Ошибки синтаксического анализа (всего: {parser.SyntaxErrors.Count}):";
+
+            foreach (var err in parser.SyntaxErrors)
+            {
+                int rowIdx = dgvErrors.Rows.Add(
+                    err.Lexeme,
+                    $"Стр: {err.Line}, Поз: {err.StartPos}",
+                    err.Type
+                );
+                dgvErrors.Rows[rowIdx].Tag = err;
+            }
+
+            if (parser.SyntaxErrors.Count == 0 && lastAnalysisResults.Count > 0)
+            {
+                MessageBox.Show("Синтаксический анализ завершен. Ошибок не найдено!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        private void dgvErrors_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && dgvErrors.Rows[e.RowIndex].Tag is Token err)
+            {
+                int charIndex = richTextBox1.GetFirstCharIndexFromLine(err.Line - 1) + err.StartPos;
+                richTextBox1.Focus();
+                int len = Math.Max(1, err.EndPos - err.StartPos);
+                richTextBox1.Select(charIndex, len);
             }
         }
     }
