@@ -167,3 +167,50 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 
 ### 3. Строка состоящая из букв/цифр/других символов
 ![](READMEpicture/Снимок_экрана_2026-03-16_114723.png)
+
+
+## Лабораторная работа 3. Разработка синтаксического анализатора (парсера)
+
+### Цель работы
+
+Изучить назначение и принципы работы синтаксического анализатора в структуре компилятора. Спроектировать грамматику, построить соответствующую схему метода анализа грамматики и выполнить программную реализацию парсера с нейтрализацией синтаксических ошибок методом Айронса. Интегрировать разработанный модуль в ранее созданный графический интерфейс языкового процессора.
+
+### Постановка задачи
+
+Разработать синтаксический анализатор для объявлений строковых констант в Rust. Парсер должен принимать поток лексем, проверять их на соответствие грамматике и, в случае обнаружения ошибок, нейтрализовать их методом Айронса.
+
+### Разработка грамматики
+
+<div>
+    <p>G[Z]={Vt,Vn,Z,P}<br />Vt={const, :, &str, space, =, ", ;, [^"]}<br />Vn={Z,  ID, Bodystring, IDRest,BodyStringRest,IDStart, BodyStringStart, QuoteOpen, CloseQuote,BodyString, TypeStart}</p>
+    <p>P = {<br /><li><span class="non-terminal">&lt;Z&gt;</span> &rarr; <span class="terminal">const</span> <span class="non-terminal">&lt;Space1&gt;</span></li>
+            <li><span class="non-terminal">&lt;Space1&gt;</span> &rarr; <span class="terminal">space</span> <span class="non-terminal">&lt;IDStart&gt;</span></li>
+            <li><span class="non-terminal">&lt;IDStart&gt;</span> &rarr; <span class="terminal">_</span> <span class="non-terminal">&lt;IDRest&gt;</span> | <span class="terminal">Б</span> <span class="non-terminal">&lt;IDRest&gt;</span></li>
+            <li><span class="non-terminal">&lt;IDRest&gt;</span> &rarr; <span class="terminal">_</span> <span class="non-terminal">&lt;IDRest&gt;</span> | <span class="terminal">Б</span> <span class="non-terminal">&lt;IDRest&gt;</span> | <span class="terminal">Ц</span> <span class="non-terminal">&lt;IDRest&gt;</span> | <span class="terminal">:</span> <span class="non-terminal">&lt;TypeStart&gt;</span></li>
+            <li><span class="non-terminal">&lt;TypeStart&gt;</span> &rarr; <span class="terminal">&str</span> <span class="non-terminal">&lt;Eq&gt;</span></li>
+            <li><span class="non-terminal">&lt;Eq&gt;</span> &rarr; <span class="terminal">=</span> <span class="non-terminal">&lt;QuateOpen&gt;</span></li>
+            <li><span class="non-terminal">&lt;QuateOpen&gt;</span> &rarr; <span class="terminal">"</span> <span class="non-terminal">&lt;BodyString&gt;</span></li>
+            <li><span class="non-terminal">&lt;BodyString&gt;</span> &rarr; <span class="terminal">[^"]</span> <span class="non-terminal">&lt;BodyStringRest&gt;</span></li>
+            <li><span class="non-terminal">&lt;BodyStringRest&gt;</span> &rarr; <span class="terminal">[^"]</span> <span class="non-terminal">&lt;BodyStringRest&gt;</span> | <span class="terminal">"</span> <span class="non-terminal">&lt;CloseQuote&gt;</span></li>
+            <li><span class="non-terminal">&lt;CloseQuote&gt;</span> &rarr; <span class="terminal">;</span> <span class="terminal">END</span></li>}</p>
+</div>
+
+### Классификация грамматики
+
+Согласно классификации Хомского, грамматика G[Z] является полностью автоматной.
+
+### Метод анализа
+
+Граф конечного автомата
+![Диаграмма состояний](READMEpicture/Схема_сканера.png)
+
+### Диагностика и нейтрализация синтаксических ошибок
+
+**Метод Айронса**<br>
+Разрабатываемый синтаксический анализатор построен на базе автоматной грамматики. При нахождении лексемы, которая не соответствует грамматике предлагается свести алгоритм нейтрализации к последовательному удалению следующего символа во входной цепочке до тех пор, пока следующий символ не окажется одним из допустимых в данный момент разбора.
+
+### Тестовые примеры
+
+![Диаграмма состояний](READMEpicture/0_ошибок.png)
+![Диаграмма состояний](READMEpicture/1_ошибка.png)
+![Диаграмма состояний](READMEpicture/3_ошибки.png)
