@@ -38,10 +38,10 @@
             dataGridViewTextBoxColumn10 = new DataGridViewTextBoxColumn();
             tabPage2 = new TabPage();
             dgvErrors = new DataGridView();
-            this.lblErrCount = new System.Windows.Forms.Label();
             dataGridViewTextBoxColumn11 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn12 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn13 = new DataGridViewTextBoxColumn();
+            lblErrCount = new Label();
             menuStrip1 = new MenuStrip();
             файлToolStripMenuItem = new ToolStripMenuItem();
             создатьToolStripMenuItem = new ToolStripMenuItem();
@@ -134,10 +134,10 @@
             dataGridView1.Location = new Point(3, 3);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
-            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.Size = new Size(786, 200);
             dataGridView1.TabIndex = 7;
+            dataGridView1.CellClick += dataGridView1_CellClick;
             // 
             // dataGridViewTextBoxColumn4
             // 
@@ -186,19 +186,11 @@
             dgvErrors.Location = new Point(3, 3);
             dgvErrors.Name = "dgvErrors";
             dgvErrors.ReadOnly = true;
-            this.dgvErrors.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvErrors_CellClick);
             dgvErrors.RowHeadersVisible = false;
             dgvErrors.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvErrors.Size = new Size(786, 196);
+            dgvErrors.Size = new Size(786, 171);
             dgvErrors.TabIndex = 8;
-            // 
-            // lblErrCount
-            // 
-            lblErrCount.Dock = DockStyle.Bottom;
-            lblErrCount.Height = 25; 
-            lblErrCount.Text = "Ошибок не обнаружено";
-            lblErrCount.TextAlign = ContentAlignment.MiddleLeft; 
-            lblErrCount.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dgvErrors.CellClick += dgvErrors_CellClick;
             // 
             // dataGridViewTextBoxColumn11
             // 
@@ -217,6 +209,17 @@
             dataGridViewTextBoxColumn13.HeaderText = "Описание ошибки";
             dataGridViewTextBoxColumn13.Name = "dataGridViewTextBoxColumn13";
             dataGridViewTextBoxColumn13.ReadOnly = true;
+            // 
+            // lblErrCount
+            // 
+            lblErrCount.Dock = DockStyle.Bottom;
+            lblErrCount.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblErrCount.Location = new Point(3, 174);
+            lblErrCount.Name = "lblErrCount";
+            lblErrCount.Size = new Size(786, 25);
+            lblErrCount.TabIndex = 9;
+            lblErrCount.Text = "Ошибок не обнаружено";
+            lblErrCount.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // menuStrip1
             // 
@@ -238,35 +241,35 @@
             // создатьToolStripMenuItem
             // 
             создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
-            создатьToolStripMenuItem.Size = new Size(153, 22);
+            создатьToolStripMenuItem.Size = new Size(154, 22);
             создатьToolStripMenuItem.Text = "Создать";
             создатьToolStripMenuItem.Click += создатьToolStripMenuItem_Click;
             // 
             // открытьToolStripMenuItem
             // 
             открытьToolStripMenuItem.Name = "открытьToolStripMenuItem";
-            открытьToolStripMenuItem.Size = new Size(153, 22);
+            открытьToolStripMenuItem.Size = new Size(154, 22);
             открытьToolStripMenuItem.Text = "Открыть";
             открытьToolStripMenuItem.Click += открытьToolStripMenuItem_Click;
             // 
             // сохранитьToolStripMenuItem
             // 
             сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
-            сохранитьToolStripMenuItem.Size = new Size(153, 22);
+            сохранитьToolStripMenuItem.Size = new Size(154, 22);
             сохранитьToolStripMenuItem.Text = "Сохранить";
             сохранитьToolStripMenuItem.Click += сохранитьToolStripMenuItem_Click;
             // 
             // сохранитьКакToolStripMenuItem
             // 
             сохранитьКакToolStripMenuItem.Name = "сохранитьКакToolStripMenuItem";
-            сохранитьКакToolStripMenuItem.Size = new Size(153, 22);
+            сохранитьКакToolStripMenuItem.Size = new Size(154, 22);
             сохранитьКакToolStripMenuItem.Text = "Сохранить как";
             сохранитьКакToolStripMenuItem.Click += сохранитьКакToolStripMenuItem_Click;
             // 
             // выходToolStripMenuItem
             // 
             выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            выходToolStripMenuItem.Size = new Size(153, 22);
+            выходToolStripMenuItem.Size = new Size(154, 22);
             выходToolStripMenuItem.Text = "Выход";
             выходToolStripMenuItem.Click += выходToolStripMenuItem_Click;
             // 
@@ -330,7 +333,7 @@
             // 
             текстToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { постановкаЗадачиToolStripMenuItem, грамматикаToolStripMenuItem, классификацияГрамматикиToolStripMenuItem, методАнализаToolStripMenuItem, тестовыйПримерToolStripMenuItem, списокЛитераторыToolStripMenuItem, исходныйКодлToolStripMenuItem });
             текстToolStripMenuItem.Name = "текстToolStripMenuItem";
-            текстToolStripMenuItem.Size = new Size(49, 20);
+            текстToolStripMenuItem.Size = new Size(48, 20);
             текстToolStripMenuItem.Text = "Текст";
             // 
             // постановкаЗадачиToolStripMenuItem
@@ -338,30 +341,35 @@
             постановкаЗадачиToolStripMenuItem.Name = "постановкаЗадачиToolStripMenuItem";
             постановкаЗадачиToolStripMenuItem.Size = new Size(231, 22);
             постановкаЗадачиToolStripMenuItem.Text = "Постановка задачи";
+            постановкаЗадачиToolStripMenuItem.Click += постановкаЗадачиToolStripMenuItem_Click_1;
             // 
             // грамматикаToolStripMenuItem
             // 
             грамматикаToolStripMenuItem.Name = "грамматикаToolStripMenuItem";
             грамматикаToolStripMenuItem.Size = new Size(231, 22);
             грамматикаToolStripMenuItem.Text = "Грамматика";
+            грамматикаToolStripMenuItem.Click += грамматикаToolStripMenuItem_Click_1;
             // 
             // классификацияГрамматикиToolStripMenuItem
             // 
             классификацияГрамматикиToolStripMenuItem.Name = "классификацияГрамматикиToolStripMenuItem";
             классификацияГрамматикиToolStripMenuItem.Size = new Size(231, 22);
             классификацияГрамматикиToolStripMenuItem.Text = "Классификация грамматики";
+            классификацияГрамматикиToolStripMenuItem.Click += классификацияГрамматикиToolStripMenuItem_Click_1;
             // 
             // методАнализаToolStripMenuItem
             // 
             методАнализаToolStripMenuItem.Name = "методАнализаToolStripMenuItem";
             методАнализаToolStripMenuItem.Size = new Size(231, 22);
             методАнализаToolStripMenuItem.Text = "Метод анализа";
+            методАнализаToolStripMenuItem.Click += методАнализаToolStripMenuItem_Click_1;
             // 
             // тестовыйПримерToolStripMenuItem
             // 
             тестовыйПримерToolStripMenuItem.Name = "тестовыйПримерToolStripMenuItem";
             тестовыйПримерToolStripMenuItem.Size = new Size(231, 22);
             тестовыйПримерToolStripMenuItem.Text = "Тестовый пример";
+            тестовыйПримерToolStripMenuItem.Click += тестовыйПримерToolStripMenuItem_Click_1;
             // 
             // списокЛитераторыToolStripMenuItem
             // 

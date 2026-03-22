@@ -267,20 +267,9 @@ namespace WinFormsApp4
         }
         #endregion
 
-
-        private void списокЛитераторыToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void исходныйКодлToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-        
+
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -343,7 +332,7 @@ namespace WinFormsApp4
                 {
                     if (errorCount > 0)
                     {
-                        tabControl1.SelectedIndex = 1; 
+                        tabControl1.SelectedIndex = 1;
                     }
                     else
                     {
@@ -378,7 +367,7 @@ namespace WinFormsApp4
                         richTextBox1.ScrollToCaret();
                     }
                 }
-                catch {}
+                catch { }
             }
         }
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -400,8 +389,53 @@ namespace WinFormsApp4
                         richTextBox1.ScrollToCaret();
                     }
                 }
-                catch {}
+                catch { }
             }
+        }
+
+        private void постановкаЗадачиToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            var info = new InfoForm("Постановка задачи", "Task.html");
+            info.ShowDialog();
+        }
+
+        private void грамматикаToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            var info = new InfoForm("Грамматика", "Grammar.html");
+            info.ShowDialog();
+        }
+
+        private void классификацияГрамматикиToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {   
+            var info = new InfoForm("Классификация грамматики", "Classification.html");
+            info.ShowDialog();
+
+        }
+
+        private void методАнализаToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            var info = new InfoForm("Метод анализа", "Method.html");
+            info.ShowDialog();
+        }
+
+        private void тестовыйПримерToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            var info = new InfoForm("Тестовый пример", "Tests.html");
+            info.ShowDialog();
+        }
+
+        private void списокЛитераторыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var info = new InfoForm("Список литературы", "References.html");
+            info.ShowDialog();
+        }
+        private void исходныйКодлToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "https://github.com/GodwynCornelia/TFLandC/blob/main/README.md",
+                UseShellExecute = true
+            });
         }
     }
 }

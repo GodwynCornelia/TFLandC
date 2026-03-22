@@ -9,6 +9,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="res\Classification.html" />
+    <None Remove="res\Grammar.html" />
+    <None Remove="res\Method.html" />
+    <None Remove="res\References.html" />
+    <None Remove="res\Task.html" />
+    <None Remove="res\Tests.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="res\Classification.html" />
+    <EmbeddedResource Include="res\Grammar.html" />
+    <EmbeddedResource Include="res\Method.html" />
+    <EmbeddedResource Include="res\References.html" />
+    <EmbeddedResource Include="res\Task.html" />
+    <EmbeddedResource Include="res\Tests.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Постановка задачи</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            color: #333;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-top: 30px;
+        }
+
+        p {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 5px solid #3498db;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 16px;
+            color: #c7254e;
+        }
+
+        pre code {
+            color: #333;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            font-size: 18px;
+            color: #555;
+            margin: 8px 0;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+        .grammar-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Постановка задачи</h1>
+
+    <h2>Оглавление</h2>
+    <ul>
+        <li><a href="#тема-работы">Тема работы</a></li>
+        <li><a href="#особенности-языка">Особенности языка Rust</a></li>
+        <li><a href="#примеры-верных-строк">Примеры верных конструкций</a></li>
+    </ul>
+
+    <h2 id="тема-работы">Тема работы</h2>
+    <p>Разработка текстового редактора с функциями языкового процессора. <b>Объявления строковой константы на языке Rust</b>.</p>
+
+    <h2 id="особенности-языка">Особенности языка</h2>
+    <p>В языке Rust константы представляют собой значения, которые привязаны к идентификатору и не могут быть изменены. Они объявляются с использованием ключевого слова <code>const</code>.</p>
+    <p>Основные правила объявления строковых констант в Rust:</p>
+    <ul>
+        <li>В отличие от переменных (let), тип константы <b>обязательно</b> должен быть указан явно после двоеточия.</li>
+        <li>Для строковых литералов используется тип <code>&str</code> (ссылка на строковый срез).</li>
+        <li>Значение должно быть известно на этапе компиляции.</li>
+    </ul>
+
+    <p>Формат объявления:</p>
+    <pre><code>const NAME: &str = "value";</code></pre>
+
+    <h2 id="примеры-верных-строк">Примеры верных строк из языка</h2>
+    <p>В соответствии с разработанной автоматной грамматикой, процессор будет считать верными следующие записи:</p>
+
+    <pre><code>const GREETING: &str = "Hello, Rust!";</code></pre>
+
+    <pre><code>const _PRIVATE_MSG: &str = "top secret";</code></pre>
+
+    <pre><code>const VERSION1: &str = "1.0.2";</code></pre>
+
+    <pre><code>const empty: &str = "";</code></pre>
+
+    <p>Синтаксический анализатор проверяет строгое соблюдение последовательности: наличие пробелов, двоеточия, амперсанда перед типом <code>str</code> и завершающей точки с запятой.</p>
+
+</body>
+</html>
