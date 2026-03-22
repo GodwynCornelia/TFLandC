@@ -1,5 +1,6 @@
 using System.Threading.Channels;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace WinFormsApp4
 {
@@ -279,14 +280,7 @@ namespace WinFormsApp4
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && dataGridView1.Rows[e.RowIndex].Tag is Token token)
-            {
-
-                int charIndex = richTextBox1.GetFirstCharIndexFromLine(token.Line - 1) + token.StartPos;
-
-                richTextBox1.Focus();
-                richTextBox1.Select(charIndex, token.EndPos - token.StartPos);
-            }
+        
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -305,47 +299,108 @@ namespace WinFormsApp4
 
         private void пускToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Scanner scanner = new Scanner();
-            lastAnalysisResults = scanner.Analyze(richTextBox1.Text);
-            dataGridView1.Rows.Clear();
-            foreach (var t in lastAnalysisResults)
+            try
             {
-                int rowIdx = dataGridView1.Rows.Add(t.Code, t.Type, t.Lexeme, $"Л:{t.Line} П:{t.StartPos}");
-                dataGridView1.Rows[rowIdx].Tag = t;
+                if (string.IsNullOrWhiteSpace(richTextBox1.Text))
+                {
+                    MessageBox.Show("Введите код для анализа", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-                if (t.Code == 99)
-                    dataGridView1.Rows[rowIdx].DefaultCellStyle.BackColor = Color.MistyRose;
+                dataGridView1.Rows.Clear();
+                dgvErrors.Rows.Clear();
+
+                Scanner scanner = new Scanner();
+                List<Token> tokens = scanner.Analyze(richTextBox1.Text);
+
+                foreach (var t in tokens)
+                {
+                    int rowIdx = dataGridView1.Rows.Add(t.Code, t.Type, t.Lexeme, $"Л:{t.Line} П:{t.StartPos}");
+                    dataGridView1.Rows[rowIdx].Tag = t;
+                }
+
+                Parser parser = new Parser(tokens);
+                parser.Parse();
+
+                if (parser.SyntaxErrors != null)
+                {
+                    foreach (var err in parser.SyntaxErrors)
+                    {
+                        int rowIdx = dgvErrors.Rows.Add(err.Lexeme, $"Стр:{err.Line}, Поз:{err.StartPos}", err.Type);
+                        dgvErrors.Rows[rowIdx].Tag = err;
+                    }
+                }
+
+                int errorCount = parser.SyntaxErrors?.Count ?? 0;
+
+                if (lblErrCount != null)
+                {
+                    lblErrCount.Text = $"Общее количество ошибок: {errorCount}";
+                    lblErrCount.ForeColor = errorCount > 0 ? Color.Red : Color.Green;
+                }
+
+                if (tabControl1 != null)
+                {
+                    if (errorCount > 0)
+                    {
+                        tabControl1.SelectedIndex = 1; 
+                    }
+                    else
+                    {
+                        tabControl1.SelectedIndex = 0;
+                        MessageBox.Show("Синтаксических ошибок не обнаружено!", "Анализ завершен", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Критическая ошибка при анализе: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            Parser parser = new Parser(lastAnalysisResults);
-            parser.Parse();
-
-            dgvErrors.Rows.Clear();
-            lblErrCount.Text = $"Ошибки синтаксического анализа (всего: {parser.SyntaxErrors.Count}):";
-
-            foreach (var err in parser.SyntaxErrors)
-            {
-                int rowIdx = dgvErrors.Rows.Add(
-                    err.Lexeme,
-                    $"Стр: {err.Line}, Поз: {err.StartPos}",
-                    err.Type
-                );
-                dgvErrors.Rows[rowIdx].Tag = err;
-            }
-
-            if (parser.SyntaxErrors.Count == 0 && lastAnalysisResults.Count > 0)
-            {
-                MessageBox.Show("Синтаксический анализ завершен. Ошибок не найдено!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
         }
+
         private void dgvErrors_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && dgvErrors.Rows[e.RowIndex].Tag is Token err)
             {
-                int charIndex = richTextBox1.GetFirstCharIndexFromLine(err.Line - 1) + err.StartPos;
-                richTextBox1.Focus();
-                int len = Math.Max(1, err.EndPos - err.StartPos);
-                richTextBox1.Select(charIndex, len);
+                try
+                {
+                    int lineStartIndex = richTextBox1.GetFirstCharIndexFromLine(err.Line - 1);
+                    if (lineStartIndex == -1) return;
+
+                    int globalSelectionStart = lineStartIndex + err.StartPos;
+                    int length = err.Lexeme.Length;
+
+                    richTextBox1.Focus();
+                    if (globalSelectionStart >= 0 && globalSelectionStart + length <= richTextBox1.Text.Length)
+                    {
+                        richTextBox1.Select(globalSelectionStart, length);
+                        richTextBox1.ScrollToCaret();
+                    }
+                }
+                catch {}
+            }
+        }
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && dataGridView1.Rows[e.RowIndex].Tag is Token t)
+            {
+                try
+                {
+                    int lineStartIndex = richTextBox1.GetFirstCharIndexFromLine(t.Line - 1);
+                    if (lineStartIndex == -1) return;
+
+                    int globalSelectionStart = lineStartIndex + t.StartPos;
+                    int length = t.Lexeme.Length;
+
+                    richTextBox1.Focus();
+                    if (globalSelectionStart >= 0 && globalSelectionStart + length <= richTextBox1.Text.Length)
+                    {
+                        richTextBox1.Select(globalSelectionStart, length);
+                        richTextBox1.ScrollToCaret();
+                    }
+                }
+                catch {}
             }
         }
     }

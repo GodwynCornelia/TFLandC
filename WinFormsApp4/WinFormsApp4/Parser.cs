@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WinFormsApp4
 {
@@ -20,71 +21,83 @@ namespace WinFormsApp4
 
             while (i < _tokens.Count)
             {
-                try
+                if (!Expect(ref i, 1, "Ключевое слово 'const'"))
                 {
-                    if (!Check(i, 1, "const", out i)) { i = Recovery(i); continue; }
-                    if (!Check(i, 2, "идентификатор", out i)) { i = Recovery(i); continue; }
-                    if (!Check(i, 5, "':'", out i)) { i = Recovery(i); continue; }
-                    if (i < _tokens.Count && _tokens[i].Lexeme != "&str")
-                    {
-                        AddError(_tokens[i], "Ожидался тип '&str'");
-                        i = Recovery(i);
-                        continue;
-                    }
-                    if (!Check(i, 3, "&str", out i)) { i = Recovery(i); continue; }
-                    if (!Check(i, 6, "'='", out i)) { i = Recovery(i); continue; }
-                    if (!Check(i, 7, "строковый литерал", out i)) { i = Recovery(i); continue; }
-                    if (!Check(i, 8, "';'", out i)) { i = Recovery(i); continue; }
+                    Recover(ref i, new int[] { 2, 5, 8 });
+                    if (i < _tokens.Count && _tokens[i].Code == 1) continue;
                 }
-                catch { i = Recovery(i); }
+
+                if (!Expect(ref i, 2, "Идентификатор (имя константы)"))
+                {
+                    Recover(ref i, new int[] { 5, 3, 6, 8 });
+                }
+
+                if (!Expect(ref i, 5, "Разделитель ':'"))
+                {
+                    Recover(ref i, new int[] { 3, 6, 8 });
+                }
+
+                if (!Expect(ref i, 3, "Тип данных '&str'"))
+                {
+                    Recover(ref i, new int[] { 6, 8 });
+                }
+
+                if (!Expect(ref i, 6, "Оператор присваивания '='"))
+                {
+                    Recover(ref i, new int[] { 7, 8 });
+                }
+
+                if (!Expect(ref i, 7, "Строковый литерал в кавычках"))
+                {
+                    Recover(ref i, new int[] { 8 });
+                }
+
+                if (!Expect(ref i, 8, "Символ ';' в конце строки"))
+                { 
+                    Recover(ref i, new int[] { 1 });
+                }
             }
         }
 
-        private bool Check(int index, int expectedCode, string description, out int nextIndex)
+        private bool Expect(ref int index, int expectedCode, string desc)
         {
-            nextIndex = index;
             if (index >= _tokens.Count)
             {
-                Token last = _tokens.Count > 0 ? _tokens[_tokens.Count - 1] : new Token { Line = 1, StartPos = 0 };
-                SyntaxErrors.Add(new Token
-                {
-                    Lexeme = "EOF",
-                    Line = last.Line,
-                    StartPos = last.EndPos,
-                    Type = $"Ожидалось {description}",
-                    Code = 99
-                });
+                AddError(null, $"Неожиданный конец кода. Ожидалось: {desc}");
                 return false;
             }
 
             if (_tokens[index].Code != expectedCode)
             {
-                AddError(_tokens[index], $"Ожидалось {description}");
+                AddError(_tokens[index], $"Ошибка синтаксиса: {desc}");
                 return false;
             }
 
-            nextIndex++;
+            index++;
             return true;
         }
+        private void Recover(ref int index, int[] lookaheadCodes)
+        {
+            while (index < _tokens.Count)
+            {
+                if (_tokens[index].Code == 1) return;
+                if (lookaheadCodes.Contains(_tokens[index].Code)) return;
 
-        private void AddError(Token t, string msg)
+                index++;
+            }
+        }
+
+        private void AddError(Token t, string message)
         {
             SyntaxErrors.Add(new Token
             {
-                Lexeme = t.Lexeme,
-                Line = t.Line,
-                StartPos = t.StartPos,
-                EndPos = t.EndPos,
-                Type = msg,
+                Lexeme = t != null ? t.Lexeme : "EOF",
+                Line = t != null ? t.Line : (_tokens.Count > 0 ? _tokens.Last().Line : 1),
+                StartPos = t != null ? t.StartPos : 0,
+                EndPos = t != null ? t.EndPos : 0,
+                Type = message,
                 Code = 99
             });
-        }
-
-        private int Recovery(int currentIndex)
-        {
-            int i = currentIndex;
-            while (i < _tokens.Count && _tokens[i].Code != 8) i++;
-            return i + 1;
         }
     }
 }
