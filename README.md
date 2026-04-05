@@ -182,17 +182,22 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 ### Разработка грамматики
 
 <div>
-    <p>G[Z]={Vt,Vn,Z,P}<br />Vt={const, :, &str, space, =, ", ;, [^"]}<br />Vn={Z,  ID, Bodystring, IDRest,BodyStringRest,IDStart, BodyStringStart, QuoteOpen, CloseQuote,BodyString, TypeStart}</p>
-    <p>P = {<br /><li><span class="non-terminal">&lt;Z&gt;</span> &rarr; <span class="terminal">const</span> <span class="non-terminal">&lt;Space1&gt;</span></li>
-            <li><span class="non-terminal">&lt;Space1&gt;</span> &rarr; <span class="terminal">space</span> <span class="non-terminal">&lt;IDStart&gt;</span></li>
-            <li><span class="non-terminal">&lt;IDStart&gt;</span> &rarr; <span class="terminal">_</span> <span class="non-terminal">&lt;IDRest&gt;</span> | <span class="terminal">Б</span> <span class="non-terminal">&lt;IDRest&gt;</span></li>
-            <li><span class="non-terminal">&lt;IDRest&gt;</span> &rarr; <span class="terminal">_</span> <span class="non-terminal">&lt;IDRest&gt;</span> | <span class="terminal">Б</span> <span class="non-terminal">&lt;IDRest&gt;</span> | <span class="terminal">Ц</span> <span class="non-terminal">&lt;IDRest&gt;</span> | <span class="terminal">:</span> <span class="non-terminal">&lt;TypeStart&gt;</span></li>
-            <li><span class="non-terminal">&lt;TypeStart&gt;</span> &rarr; <span class="terminal">&str</span> <span class="non-terminal">&lt;Eq&gt;</span></li>
-            <li><span class="non-terminal">&lt;Eq&gt;</span> &rarr; <span class="terminal">=</span> <span class="non-terminal">&lt;QuateOpen&gt;</span></li>
-            <li><span class="non-terminal">&lt;QuateOpen&gt;</span> &rarr; <span class="terminal">"</span> <span class="non-terminal">&lt;BodyString&gt;</span></li>
-            <li><span class="non-terminal">&lt;BodyString&gt;</span> &rarr; <span class="terminal">[^"]</span> <span class="non-terminal">&lt;BodyStringRest&gt;</span></li>
-            <li><span class="non-terminal">&lt;BodyStringRest&gt;</span> &rarr; <span class="terminal">[^"]</span> <span class="non-terminal">&lt;BodyStringRest&gt;</span> | <span class="terminal">"</span> <span class="non-terminal">&lt;CloseQuote&gt;</span></li>
-            <li><span class="non-terminal">&lt;CloseQuote&gt;</span> &rarr; <span class="terminal">;</span> <span class="terminal">END</span></li>}</p>
+    <p>G[Z]={Vt,Vn,Z,P}<br />Vt={ ' const ', ' : ',  ' &str ', 'space', ' = ', ' " ', ' ; ', '_' , a...z, A...Z, 0...9, '!','?',...}<br />Vstr=Vt\{' " '}<br />Vn={Z,  ID, Bodystring, IDRest,BodyStringRest,IDStart, BodyStringStart, QuoteOpen, CloseQuote,BodyString, TypeStart, Letter, Digit, Char}</p>
+    <p>P = {<br />
+    <li><span class="non-terminal">&lt;Z&gt;</span> &rarr; <span class="terminal">'const'</span> <span class="non-terminal">&lt;Space1&gt;</span></li>
+    <li><span class="non-terminal">&lt;Space1&gt;</span> &rarr; <span class="terminal">' '</span> <span class="non-terminal">&lt;IDStart&gt;</span></li>
+    <li><span class="non-terminal">&lt;IDStart&gt;</span> &rarr; <span class="terminal">'_'</span> <span class="non-terminal">&lt;IDRest&gt;</span> | <span class="non-terminal">&lt;Letter&gt;</span> <span class="non-terminal">&lt;IDRest&gt;</span></li>
+    <li><span class="non-terminal">&lt;IDRest&gt;</span> &rarr; <span class="terminal">'_'</span> <span class="non-terminal">&lt;IDRest&gt;</span> | <span class="non-terminal">&lt;Letter&gt;</span> <span class="non-terminal">&lt;IDRest&gt;</span> | <span class="non-terminal">&lt;Digit&gt;</span> <span class="non-terminal">&lt;IDRest&gt;</span> | <span class="terminal">':'</span> <span class="non-terminal">&lt;TypeStart&gt;</span></li>
+    <li><span class="non-terminal">&lt;TypeStart&gt;</span> &rarr; <span class="terminal">'&str'</span> <span class="non-terminal">&lt;Eq&gt;</span></li>
+    <li><span class="non-terminal">&lt;Eq&gt;</span> &rarr; <span class="terminal">'='</span> <span class="non-terminal">&lt;QuateOpen&gt;</span></li>
+    <li><span class="non-terminal">&lt;QuateOpen&gt;</span> &rarr; <span class="terminal">'"'</span> <span class="non-terminal">&lt;BodyString&gt;</span></li>
+    <li><span class="non-terminal">&lt;BodyString&gt;</span> &rarr; <span class="non-terminal">&lt;Char&gt;</span> <span class="non-terminal">&lt;BodyStringRest&gt;</span> | <span class="terminal">'"'</span> <span class="non-terminal">&lt;CloseQuote&gt;</span></li>
+    <li><span class="non-terminal">&lt;BodyStringRest&gt;</span> &rarr; <span class="non-terminal">&lt;Char&gt;</span> <span class="non-terminal">&lt;BodyStringRest&gt;</span> | <span class="terminal">'"'</span> <span class="non-terminal">&lt;CloseQuote&gt;</span></li>
+    <li><span class="non-terminal">&lt;CloseQuote&gt;</span> &rarr; <span class="terminal">';'</span> <span class="terminal">END</span></li>
+    <li><span class="non-terminal">&lt;Letter&gt;</span> &rarr; <span class="terminal">'a'</span> | <span class="terminal">'b'</span> | ... | <span class="terminal">'Z'</span></li>
+    <li><span class="non-terminal">&lt;Digit&gt;</span> &rarr; <span class="terminal">'0'</span> | <span class="terminal">'1'</span> | ... | <span class="terminal">'9'</span></li>
+    <li><span class="non-terminal">&lt;Char&gt;</span> &rarr; <span class="terminal">V<sub>str</sub></span></li>
+}</p>
 </div>
 
 ### Классификация грамматики
@@ -202,7 +207,7 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 ### Метод анализа
 
 Граф конечного автомата
-![Диаграмма состояний](READMEpicture/Схема_сканера.png)
+![Диаграмма состояний](READMEpicture/Грамматика.png)
 
 ### Диагностика и нейтрализация синтаксических ошибок
 
