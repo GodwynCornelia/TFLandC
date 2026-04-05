@@ -2,15 +2,8 @@
 {
     partial class Form1
     {
-        /// <summary>
-        ///  Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        ///  Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,26 +15,9 @@
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            TabControl tabControl1;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            tabPage1 = new TabPage();
-            dataGridView1 = new DataGridView();
-            dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn6 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn10 = new DataGridViewTextBoxColumn();
-            tabPage2 = new TabPage();
-            dgvErrors = new DataGridView();
-            dataGridViewTextBoxColumn11 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn12 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn13 = new DataGridViewTextBoxColumn();
-            lblErrCount = new Label();
             menuStrip1 = new MenuStrip();
             файлToolStripMenuItem = new ToolStripMenuItem();
             создатьToolStripMenuItem = new ToolStripMenuItem();
@@ -58,178 +34,60 @@
             удалитьToolStripMenuItem = new ToolStripMenuItem();
             выделитьВсToolStripMenuItem = new ToolStripMenuItem();
             текстToolStripMenuItem = new ToolStripMenuItem();
-            постановкаЗадачиToolStripMenuItem = new ToolStripMenuItem();
+            постановкаЗадачиToolStripMenuItem1 = new ToolStripMenuItem();
             грамматикаToolStripMenuItem = new ToolStripMenuItem();
             классификацияГрамматикиToolStripMenuItem = new ToolStripMenuItem();
             методАнализаToolStripMenuItem = new ToolStripMenuItem();
             тестовыйПримерToolStripMenuItem = new ToolStripMenuItem();
-            списокЛитераторыToolStripMenuItem = new ToolStripMenuItem();
-            исходныйКодлToolStripMenuItem = new ToolStripMenuItem();
+            списокЛитературыToolStripMenuItem = new ToolStripMenuItem();
+            исходныйКодПрограммыToolStripMenuItem = new ToolStripMenuItem();
             пускToolStripMenuItem = new ToolStripMenuItem();
             справкаToolStripMenuItem = new ToolStripMenuItem();
+            вызовСправкиToolStripMenuItem1 = new ToolStripMenuItem();
+            оПрограммеToolStripMenuItem1 = new ToolStripMenuItem();
+            постановкаЗадачиToolStripMenuItem = new ToolStripMenuItem();
             вызовСправкиToolStripMenuItem = new ToolStripMenuItem();
             оПрограммеToolStripMenuItem = new ToolStripMenuItem();
-            richTextBox1 = new RichTextBox();
             toolStrip1 = new ToolStrip();
-            toolStripButton1 = new ToolStripButton();
-            toolStripButton2 = new ToolStripButton();
-            toolStripButton3 = new ToolStripButton();
-            toolStripButton4 = new ToolStripButton();
-            toolStripButton5 = new ToolStripButton();
-            toolStripButton6 = new ToolStripButton();
-            toolStripButton7 = new ToolStripButton();
-            toolStripButton8 = new ToolStripButton();
-            toolStripButton9 = new ToolStripButton();
-            toolStripButton10 = new ToolStripButton();
-            toolStripButton11 = new ToolStripButton();
+            btnNew = new ToolStripButton();
+            btnOpen = new ToolStripButton();
+            btnSave = new ToolStripButton();
+            toolStripSeparator1 = new ToolStripSeparator();
+            btnUndo = new ToolStripButton();
+            btnRedo = new ToolStripButton();
+            btnCopy = new ToolStripButton();
+            btnCut = new ToolStripButton();
+            btnPaste = new ToolStripButton();
+            toolStripSeparator2 = new ToolStripSeparator();
+            btnRun = new ToolStripButton();
+            comboRegexSelection = new ToolStripComboBox();
+            btnHelp = new ToolStripButton();
+            btnAbout = new ToolStripButton();
+            statusStrip1 = new StatusStrip();
+            lblStatusPath = new ToolStripStatusLabel();
             splitContainer1 = new SplitContainer();
-            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
-            tabControl1 = new TabControl();
-            tabControl1.SuspendLayout();
-            tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvErrors).BeginInit();
+            richTextBox1 = new RichTextBox();
+            dataGridView1 = new DataGridView();
+            colSubstring = new DataGridViewTextBoxColumn();
+            colPosition = new DataGridViewTextBoxColumn();
+            colLength = new DataGridViewTextBoxColumn();
             menuStrip1.SuspendLayout();
             toolStrip1.SuspendLayout();
+            statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
-            // 
-            // tabControl1
-            // 
-            tabControl1.AccessibleName = "";
-            tabControl1.Controls.Add(tabPage1);
-            tabControl1.Controls.Add(tabPage2);
-            tabControl1.Dock = DockStyle.Fill;
-            tabControl1.Location = new Point(0, 0);
-            tabControl1.Name = "tabControl1";
-            tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(800, 230);
-            tabControl1.TabIndex = 0;
-            tabControl1.Tag = "";
-            // 
-            // tabPage1
-            // 
-            tabPage1.Controls.Add(dataGridView1);
-            tabPage1.Location = new Point(4, 24);
-            tabPage1.Name = "tabPage1";
-            tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(792, 202);
-            tabPage1.TabIndex = 0;
-            tabPage1.Text = "Лексер";
-            tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // dataGridView1
-            // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn6, dataGridViewTextBoxColumn10 });
-            dataGridView1.Dock = DockStyle.Top;
-            dataGridView1.Location = new Point(3, 3);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.RowHeadersVisible = false;
-            dataGridView1.Size = new Size(786, 200);
-            dataGridView1.TabIndex = 7;
-            dataGridView1.CellClick += dataGridView1_CellClick;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            dataGridViewTextBoxColumn4.HeaderText = "Код";
-            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            dataGridViewTextBoxColumn4.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn5
-            // 
-            dataGridViewTextBoxColumn5.HeaderText = "Тип";
-            dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            dataGridViewTextBoxColumn5.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn6
-            // 
-            dataGridViewTextBoxColumn6.HeaderText = "Лексема";
-            dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
-            dataGridViewTextBoxColumn6.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn10
-            // 
-            dataGridViewTextBoxColumn10.HeaderText = "Местоположение";
-            dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
-            dataGridViewTextBoxColumn10.ReadOnly = true;
-            // 
-            // tabPage2
-            // 
-            tabPage2.Controls.Add(dgvErrors);
-            tabPage2.Controls.Add(lblErrCount);
-            tabPage2.Location = new Point(4, 24);
-            tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(792, 202);
-            tabPage2.TabIndex = 1;
-            tabPage2.Text = "Парсер";
-            tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // dgvErrors
-            // 
-            dgvErrors.AllowUserToAddRows = false;
-            dgvErrors.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvErrors.BackgroundColor = Color.White;
-            dgvErrors.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvErrors.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn11, dataGridViewTextBoxColumn12, dataGridViewTextBoxColumn13 });
-            dgvErrors.Dock = DockStyle.Fill;
-            dgvErrors.Location = new Point(3, 3);
-            dgvErrors.Name = "dgvErrors";
-            dgvErrors.ReadOnly = true;
-            dgvErrors.RowHeadersVisible = false;
-            dgvErrors.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvErrors.Size = new Size(786, 171);
-            dgvErrors.TabIndex = 8;
-            dgvErrors.CellClick += dgvErrors_CellClick;
-            // 
-            // dataGridViewTextBoxColumn11
-            // 
-            dataGridViewTextBoxColumn11.HeaderText = "Неверный фрагмент";
-            dataGridViewTextBoxColumn11.Name = "dataGridViewTextBoxColumn11";
-            dataGridViewTextBoxColumn11.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn12
-            // 
-            dataGridViewTextBoxColumn12.HeaderText = "Местоположение";
-            dataGridViewTextBoxColumn12.Name = "dataGridViewTextBoxColumn12";
-            dataGridViewTextBoxColumn12.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn13
-            // 
-            dataGridViewTextBoxColumn13.HeaderText = "Описание ошибки";
-            dataGridViewTextBoxColumn13.Name = "dataGridViewTextBoxColumn13";
-            dataGridViewTextBoxColumn13.ReadOnly = true;
-            // 
-            // lblErrCount
-            // 
-            lblErrCount.Dock = DockStyle.Bottom;
-            lblErrCount.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblErrCount.Location = new Point(3, 174);
-            lblErrCount.Name = "lblErrCount";
-            lblErrCount.Size = new Size(786, 25);
-            lblErrCount.TabIndex = 9;
-            lblErrCount.Text = "Ошибок не обнаружено";
-            lblErrCount.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // menuStrip1
             // 
             menuStrip1.Items.AddRange(new ToolStripItem[] { файлToolStripMenuItem, правкаToolStripMenuItem, текстToolStripMenuItem, пускToolStripMenuItem, справкаToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 24);
+            menuStrip1.Size = new Size(900, 24);
             menuStrip1.TabIndex = 0;
-            menuStrip1.Text = "menuStrip1";
-            menuStrip1.ItemClicked += menuStrip1_ItemClicked;
             // 
             // файлToolStripMenuItem
             // 
@@ -264,7 +122,7 @@
             сохранитьКакToolStripMenuItem.Name = "сохранитьКакToolStripMenuItem";
             сохранитьКакToolStripMenuItem.Size = new Size(154, 22);
             сохранитьКакToolStripMenuItem.Text = "Сохранить как";
-            сохранитьКакToolStripMenuItem.Click += сохранитьКакToolStripMenuItem_Click;
+            сохранитьКакToolStripMenuItem.Click += сохранитьКакToolStripMenuItem_Click_1;
             // 
             // выходToolStripMenuItem
             // 
@@ -283,107 +141,107 @@
             // отменитьToolStripMenuItem
             // 
             отменитьToolStripMenuItem.Name = "отменитьToolStripMenuItem";
-            отменитьToolStripMenuItem.Size = new Size(148, 22);
+            отменитьToolStripMenuItem.Size = new Size(147, 22);
             отменитьToolStripMenuItem.Text = "Отменить";
             отменитьToolStripMenuItem.Click += отменитьToolStripMenuItem_Click;
             // 
             // вернутьToolStripMenuItem
             // 
             вернутьToolStripMenuItem.Name = "вернутьToolStripMenuItem";
-            вернутьToolStripMenuItem.Size = new Size(148, 22);
+            вернутьToolStripMenuItem.Size = new Size(147, 22);
             вернутьToolStripMenuItem.Text = "Вернуть";
-            вернутьToolStripMenuItem.Click += вернутьToolStripMenuItem_Click;
+            вернутьToolStripMenuItem.Click += вернутьToolStripMenuItem_Click_1;
             // 
             // вырезатьToolStripMenuItem
             // 
             вырезатьToolStripMenuItem.Name = "вырезатьToolStripMenuItem";
-            вырезатьToolStripMenuItem.Size = new Size(148, 22);
+            вырезатьToolStripMenuItem.Size = new Size(147, 22);
             вырезатьToolStripMenuItem.Text = "Вырезать";
-            вырезатьToolStripMenuItem.Click += вырезатьToolStripMenuItem_Click;
+            вырезатьToolStripMenuItem.Click += вырезатьToolStripMenuItem_Click_2;
             // 
             // копироватьToolStripMenuItem
             // 
             копироватьToolStripMenuItem.Name = "копироватьToolStripMenuItem";
-            копироватьToolStripMenuItem.Size = new Size(148, 22);
+            копироватьToolStripMenuItem.Size = new Size(147, 22);
             копироватьToolStripMenuItem.Text = "Копировать";
-            копироватьToolStripMenuItem.Click += копироватьToolStripMenuItem_Click;
+            копироватьToolStripMenuItem.Click += копироватьToolStripMenuItem_Click_1;
             // 
             // вставитьToolStripMenuItem
             // 
             вставитьToolStripMenuItem.Name = "вставитьToolStripMenuItem";
-            вставитьToolStripMenuItem.Size = new Size(148, 22);
+            вставитьToolStripMenuItem.Size = new Size(147, 22);
             вставитьToolStripMenuItem.Text = "Вставить";
-            вставитьToolStripMenuItem.Click += вставитьToolStripMenuItem_Click;
+            вставитьToolStripMenuItem.Click += вставитьToolStripMenuItem_Click_1;
             // 
             // удалитьToolStripMenuItem
             // 
             удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
-            удалитьToolStripMenuItem.Size = new Size(148, 22);
+            удалитьToolStripMenuItem.Size = new Size(147, 22);
             удалитьToolStripMenuItem.Text = "Удалить";
-            удалитьToolStripMenuItem.Click += удалитьToolStripMenuItem_Click;
+            удалитьToolStripMenuItem.Click += удалитьToolStripMenuItem_Click_1;
             // 
             // выделитьВсToolStripMenuItem
             // 
             выделитьВсToolStripMenuItem.Name = "выделитьВсToolStripMenuItem";
-            выделитьВсToolStripMenuItem.Size = new Size(148, 22);
-            выделитьВсToolStripMenuItem.Text = "Выделить всё";
-            выделитьВсToolStripMenuItem.Click += выделитьВсToolStripMenuItem_Click;
+            выделитьВсToolStripMenuItem.Size = new Size(147, 22);
+            выделитьВсToolStripMenuItem.Text = "Выделать всё";
+            выделитьВсToolStripMenuItem.Click += выделитьВсToolStripMenuItem_Click_1;
             // 
             // текстToolStripMenuItem
             // 
-            текстToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { постановкаЗадачиToolStripMenuItem, грамматикаToolStripMenuItem, классификацияГрамматикиToolStripMenuItem, методАнализаToolStripMenuItem, тестовыйПримерToolStripMenuItem, списокЛитераторыToolStripMenuItem, исходныйКодлToolStripMenuItem });
+            текстToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { постановкаЗадачиToolStripMenuItem1, грамматикаToolStripMenuItem, классификацияГрамматикиToolStripMenuItem, методАнализаToolStripMenuItem, тестовыйПримерToolStripMenuItem, списокЛитературыToolStripMenuItem, исходныйКодПрограммыToolStripMenuItem });
             текстToolStripMenuItem.Name = "текстToolStripMenuItem";
             текстToolStripMenuItem.Size = new Size(48, 20);
             текстToolStripMenuItem.Text = "Текст";
             // 
-            // постановкаЗадачиToolStripMenuItem
+            // постановкаЗадачиToolStripMenuItem1
             // 
-            постановкаЗадачиToolStripMenuItem.Name = "постановкаЗадачиToolStripMenuItem";
-            постановкаЗадачиToolStripMenuItem.Size = new Size(231, 22);
-            постановкаЗадачиToolStripMenuItem.Text = "Постановка задачи";
-            постановкаЗадачиToolStripMenuItem.Click += постановкаЗадачиToolStripMenuItem_Click_1;
+            постановкаЗадачиToolStripMenuItem1.Name = "постановкаЗадачиToolStripMenuItem1";
+            постановкаЗадачиToolStripMenuItem1.Size = new Size(231, 22);
+            постановкаЗадачиToolStripMenuItem1.Text = "Постановка задачи";
+            постановкаЗадачиToolStripMenuItem1.Click += постановкаЗадачиToolStripMenuItem1_Click;
             // 
             // грамматикаToolStripMenuItem
             // 
             грамматикаToolStripMenuItem.Name = "грамматикаToolStripMenuItem";
             грамматикаToolStripMenuItem.Size = new Size(231, 22);
             грамматикаToolStripMenuItem.Text = "Грамматика";
-            грамматикаToolStripMenuItem.Click += грамматикаToolStripMenuItem_Click_1;
+            грамматикаToolStripMenuItem.Click += грамматикаToolStripMenuItem_Click;
             // 
             // классификацияГрамматикиToolStripMenuItem
             // 
             классификацияГрамматикиToolStripMenuItem.Name = "классификацияГрамматикиToolStripMenuItem";
             классификацияГрамматикиToolStripMenuItem.Size = new Size(231, 22);
             классификацияГрамматикиToolStripMenuItem.Text = "Классификация грамматики";
-            классификацияГрамматикиToolStripMenuItem.Click += классификацияГрамматикиToolStripMenuItem_Click_1;
+            классификацияГрамматикиToolStripMenuItem.Click += классификацияГрамматикиToolStripMenuItem_Click;
             // 
             // методАнализаToolStripMenuItem
             // 
             методАнализаToolStripMenuItem.Name = "методАнализаToolStripMenuItem";
             методАнализаToolStripMenuItem.Size = new Size(231, 22);
             методАнализаToolStripMenuItem.Text = "Метод анализа";
-            методАнализаToolStripMenuItem.Click += методАнализаToolStripMenuItem_Click_1;
+            методАнализаToolStripMenuItem.Click += методАнализаToolStripMenuItem_Click;
             // 
             // тестовыйПримерToolStripMenuItem
             // 
             тестовыйПримерToolStripMenuItem.Name = "тестовыйПримерToolStripMenuItem";
             тестовыйПримерToolStripMenuItem.Size = new Size(231, 22);
             тестовыйПримерToolStripMenuItem.Text = "Тестовый пример";
-            тестовыйПримерToolStripMenuItem.Click += тестовыйПримерToolStripMenuItem_Click_1;
+            тестовыйПримерToolStripMenuItem.Click += тестовыйПримерToolStripMenuItem_Click;
             // 
-            // списокЛитераторыToolStripMenuItem
+            // списокЛитературыToolStripMenuItem
             // 
-            списокЛитераторыToolStripMenuItem.Name = "списокЛитераторыToolStripMenuItem";
-            списокЛитераторыToolStripMenuItem.Size = new Size(231, 22);
-            списокЛитераторыToolStripMenuItem.Text = "Список литературы";
-            списокЛитераторыToolStripMenuItem.Click += списокЛитераторыToolStripMenuItem_Click;
+            списокЛитературыToolStripMenuItem.Name = "списокЛитературыToolStripMenuItem";
+            списокЛитературыToolStripMenuItem.Size = new Size(231, 22);
+            списокЛитературыToolStripMenuItem.Text = "Список литературы";
+            списокЛитературыToolStripMenuItem.Click += списокЛитературыToolStripMenuItem_Click;
             // 
-            // исходныйКодлToolStripMenuItem
+            // исходныйКодПрограммыToolStripMenuItem
             // 
-            исходныйКодлToolStripMenuItem.Name = "исходныйКодлToolStripMenuItem";
-            исходныйКодлToolStripMenuItem.Size = new Size(231, 22);
-            исходныйКодлToolStripMenuItem.Text = "Исходный код программы";
-            исходныйКодлToolStripMenuItem.Click += исходныйКодлToolStripMenuItem_Click;
+            исходныйКодПрограммыToolStripMenuItem.Name = "исходныйКодПрограммыToolStripMenuItem";
+            исходныйКодПрограммыToolStripMenuItem.Size = new Size(231, 22);
+            исходныйКодПрограммыToolStripMenuItem.Text = "Исходный код программы";
+            исходныйКодПрограммыToolStripMenuItem.Click += исходныйКодПрограммыToolStripMenuItem_Click;
             // 
             // пускToolStripMenuItem
             // 
@@ -394,174 +252,177 @@
             // 
             // справкаToolStripMenuItem
             // 
-            справкаToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { вызовСправкиToolStripMenuItem, оПрограммеToolStripMenuItem });
+            справкаToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { вызовСправкиToolStripMenuItem1, оПрограммеToolStripMenuItem1 });
             справкаToolStripMenuItem.Name = "справкаToolStripMenuItem";
             справкаToolStripMenuItem.Size = new Size(65, 20);
             справкаToolStripMenuItem.Text = "Справка";
+            справкаToolStripMenuItem.Click += справкаToolStripMenuItem_Click;
+            // 
+            // вызовСправкиToolStripMenuItem1
+            // 
+            вызовСправкиToolStripMenuItem1.Name = "вызовСправкиToolStripMenuItem1";
+            вызовСправкиToolStripMenuItem1.Size = new Size(156, 22);
+            вызовСправкиToolStripMenuItem1.Text = "Вызов справки";
+            вызовСправкиToolStripMenuItem1.Click += вызовСправкиToolStripMenuItem1_Click;
+            // 
+            // оПрограммеToolStripMenuItem1
+            // 
+            оПрограммеToolStripMenuItem1.Name = "оПрограммеToolStripMenuItem1";
+            оПрограммеToolStripMenuItem1.Size = new Size(156, 22);
+            оПрограммеToolStripMenuItem1.Text = "О программе";
+            оПрограммеToolStripMenuItem1.Click += оПрограммеToolStripMenuItem1_Click;
+            // 
+            // постановкаЗадачиToolStripMenuItem
+            // 
+            постановкаЗадачиToolStripMenuItem.Name = "постановкаЗадачиToolStripMenuItem";
+            постановкаЗадачиToolStripMenuItem.Size = new Size(180, 22);
+            постановкаЗадачиToolStripMenuItem.Text = "Постановка задачи";
+            постановкаЗадачиToolStripMenuItem.Click += постановкаЗадачиToolStripMenuItem_Click_1;
             // 
             // вызовСправкиToolStripMenuItem
             // 
             вызовСправкиToolStripMenuItem.Name = "вызовСправкиToolStripMenuItem";
-            вызовСправкиToolStripMenuItem.Size = new Size(156, 22);
-            вызовСправкиToolStripMenuItem.Text = "Вызов справки";
-            вызовСправкиToolStripMenuItem.Click += вызовСправкиToolStripMenuItem_Click;
+            вызовСправкиToolStripMenuItem.Size = new Size(32, 19);
             // 
             // оПрограммеToolStripMenuItem
             // 
             оПрограммеToolStripMenuItem.Name = "оПрограммеToolStripMenuItem";
-            оПрограммеToolStripMenuItem.Size = new Size(156, 22);
-            оПрограммеToolStripMenuItem.Text = "О программе";
-            оПрограммеToolStripMenuItem.Click += оПрограммеToolStripMenuItem_Click;
-            // 
-            // richTextBox1
-            // 
-            richTextBox1.BorderStyle = BorderStyle.FixedSingle;
-            richTextBox1.Dock = DockStyle.Fill;
-            richTextBox1.Location = new Point(0, 0);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(800, 164);
-            richTextBox1.TabIndex = 2;
-            richTextBox1.Text = "";
-            richTextBox1.TextChanged += richTextBox1_TextChanged;
+            оПрограммеToolStripMenuItem.Size = new Size(32, 19);
             // 
             // toolStrip1
             // 
             toolStrip1.ImageScalingSize = new Size(32, 32);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3, toolStripButton4, toolStripButton5, toolStripButton6, toolStripButton7, toolStripButton8, toolStripButton9, toolStripButton10, toolStripButton11 });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { btnNew, btnOpen, btnSave, toolStripSeparator1, btnUndo, btnRedo, btnCopy, btnCut, btnPaste, toolStripSeparator2, btnRun, comboRegexSelection, btnHelp, btnAbout });
             toolStrip1.Location = new Point(0, 24);
             toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(800, 39);
-            toolStrip1.TabIndex = 3;
-            toolStrip1.Text = "toolStrip1";
+            toolStrip1.Size = new Size(900, 39);
+            toolStrip1.TabIndex = 1;
             // 
-            // toolStripButton1
+            // btnNew
             // 
-            toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton1.Image = (Image)resources.GetObject("toolStripButton1.Image");
-            toolStripButton1.ImageTransparentColor = Color.Magenta;
-            toolStripButton1.Name = "toolStripButton1";
-            toolStripButton1.Size = new Size(36, 36);
-            toolStripButton1.Text = "toolStripButton1";
-            toolStripButton1.ToolTipText = "Создать документ";
-            toolStripButton1.Click += toolStripButton1_Click;
+            btnNew.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnNew.Image = (Image)resources.GetObject("btnNew.Image");
+            btnNew.Name = "btnNew";
+            btnNew.Size = new Size(36, 36);
+            btnNew.Text = "Создать";
+            btnNew.Click += создатьToolStripMenuItem_Click;
             // 
-            // toolStripButton2
+            // btnOpen
             // 
-            toolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton2.Image = (Image)resources.GetObject("toolStripButton2.Image");
-            toolStripButton2.ImageTransparentColor = Color.Magenta;
-            toolStripButton2.Name = "toolStripButton2";
-            toolStripButton2.Size = new Size(36, 36);
-            toolStripButton2.Text = "toolStripButton2";
-            toolStripButton2.ToolTipText = "Открыть документ";
-            toolStripButton2.Click += toolStripButton2_Click;
+            btnOpen.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnOpen.Image = (Image)resources.GetObject("btnOpen.Image");
+            btnOpen.Name = "btnOpen";
+            btnOpen.Size = new Size(36, 36);
+            btnOpen.Text = "Открыть";
+            btnOpen.Click += открытьToolStripMenuItem_Click;
             // 
-            // toolStripButton3
+            // btnSave
             // 
-            toolStripButton3.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton3.Image = (Image)resources.GetObject("toolStripButton3.Image");
-            toolStripButton3.ImageTransparentColor = Color.Magenta;
-            toolStripButton3.Name = "toolStripButton3";
-            toolStripButton3.Size = new Size(36, 36);
-            toolStripButton3.Text = "toolStripButton3";
-            toolStripButton3.ToolTipText = "Сохранить изменения";
-            toolStripButton3.Click += toolStripButton3_Click;
+            btnSave.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnSave.Image = (Image)resources.GetObject("btnSave.Image");
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(36, 36);
+            btnSave.Text = "Сохранить";
+            btnSave.Click += сохранитьToolStripMenuItem_Click;
             // 
-            // toolStripButton4
+            // toolStripSeparator1
             // 
-            toolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton4.Image = (Image)resources.GetObject("toolStripButton4.Image");
-            toolStripButton4.ImageTransparentColor = Color.Magenta;
-            toolStripButton4.Name = "toolStripButton4";
-            toolStripButton4.Size = new Size(36, 36);
-            toolStripButton4.Text = "toolStripButton4";
-            toolStripButton4.ToolTipText = "Отменить";
-            toolStripButton4.Click += toolStripButton4_Click;
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(6, 39);
             // 
-            // toolStripButton5
+            // btnUndo
             // 
-            toolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton5.Image = (Image)resources.GetObject("toolStripButton5.Image");
-            toolStripButton5.ImageTransparentColor = Color.Magenta;
-            toolStripButton5.Name = "toolStripButton5";
-            toolStripButton5.Size = new Size(36, 36);
-            toolStripButton5.Text = "toolStripButton5";
-            toolStripButton5.ToolTipText = "Вернуть";
-            toolStripButton5.Click += toolStripButton5_Click;
+            btnUndo.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnUndo.Image = (Image)resources.GetObject("btnUndo.Image");
+            btnUndo.Name = "btnUndo";
+            btnUndo.Size = new Size(36, 36);
+            btnUndo.Click += отменитьToolStripMenuItem_Click;
             // 
-            // toolStripButton6
+            // btnRedo
             // 
-            toolStripButton6.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton6.Image = (Image)resources.GetObject("toolStripButton6.Image");
-            toolStripButton6.ImageTransparentColor = Color.Magenta;
-            toolStripButton6.Name = "toolStripButton6";
-            toolStripButton6.Size = new Size(36, 36);
-            toolStripButton6.Text = "toolStripButton6";
-            toolStripButton6.ToolTipText = "Копировать\r\n";
-            toolStripButton6.Click += toolStripButton6_Click;
+            btnRedo.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnRedo.Image = (Image)resources.GetObject("btnRedo.Image");
+            btnRedo.Name = "btnRedo";
+            btnRedo.Size = new Size(36, 36);
+            btnRedo.Click += вернутьToolStripMenuItem_Click;
             // 
-            // toolStripButton7
+            // btnCopy
             // 
-            toolStripButton7.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton7.Image = (Image)resources.GetObject("toolStripButton7.Image");
-            toolStripButton7.ImageTransparentColor = Color.Magenta;
-            toolStripButton7.Name = "toolStripButton7";
-            toolStripButton7.Size = new Size(36, 36);
-            toolStripButton7.Text = "toolStripButton7";
-            toolStripButton7.ToolTipText = "Вырезать";
-            toolStripButton7.Click += toolStripButton7_Click;
+            btnCopy.Image = (Image)resources.GetObject("btnCopy.Image");
+            btnCopy.Name = "btnCopy";
+            btnCopy.Size = new Size(36, 36);
+            btnCopy.Click += btnCopy_Click;
             // 
-            // toolStripButton8
+            // btnCut
             // 
-            toolStripButton8.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton8.Image = (Image)resources.GetObject("toolStripButton8.Image");
-            toolStripButton8.ImageTransparentColor = Color.Magenta;
-            toolStripButton8.Name = "toolStripButton8";
-            toolStripButton8.Size = new Size(36, 36);
-            toolStripButton8.Text = "toolStripButton8";
-            toolStripButton8.ToolTipText = "Вставить ";
-            toolStripButton8.Click += toolStripButton8_Click;
+            btnCut.Image = (Image)resources.GetObject("btnCut.Image");
+            btnCut.Name = "btnCut";
+            btnCut.Size = new Size(36, 36);
+            btnCut.Click += btnCut_Click;
             // 
-            // toolStripButton9
+            // btnPaste
             // 
-            toolStripButton9.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton9.Image = (Image)resources.GetObject("toolStripButton9.Image");
-            toolStripButton9.ImageTransparentColor = Color.Magenta;
-            toolStripButton9.Name = "toolStripButton9";
-            toolStripButton9.Size = new Size(36, 36);
-            toolStripButton9.Text = "toolStripButton9";
-            toolStripButton9.ToolTipText = "Запуск";
-            toolStripButton9.Click += toolStripButton9_Click;
+            btnPaste.Image = (Image)resources.GetObject("btnPaste.Image");
+            btnPaste.Name = "btnPaste";
+            btnPaste.Size = new Size(36, 36);
+            btnPaste.Click += btnPaste_Click;
             // 
-            // toolStripButton10
+            // toolStripSeparator2
             // 
-            toolStripButton10.Alignment = ToolStripItemAlignment.Right;
-            toolStripButton10.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton10.Image = (Image)resources.GetObject("toolStripButton10.Image");
-            toolStripButton10.ImageTransparentColor = Color.Magenta;
-            toolStripButton10.Name = "toolStripButton10";
-            toolStripButton10.Size = new Size(36, 36);
-            toolStripButton10.Text = "toolStripButton10";
-            toolStripButton10.ToolTipText = "Справка";
-            toolStripButton10.Click += toolStripButton10_Click;
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(6, 39);
             // 
-            // toolStripButton11
+            // btnRun
             // 
-            toolStripButton11.Alignment = ToolStripItemAlignment.Right;
-            toolStripButton11.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton11.Image = (Image)resources.GetObject("toolStripButton11.Image");
-            toolStripButton11.ImageAlign = ContentAlignment.MiddleRight;
-            toolStripButton11.ImageTransparentColor = Color.Magenta;
-            toolStripButton11.Name = "toolStripButton11";
-            toolStripButton11.RightToLeft = RightToLeft.No;
-            toolStripButton11.Size = new Size(36, 36);
-            toolStripButton11.Text = "toolStripButton11";
-            toolStripButton11.ToolTipText = "О программе";
-            toolStripButton11.Click += toolStripButton11_Click;
+            btnRun.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnRun.Image = (Image)resources.GetObject("btnRun.Image");
+            btnRun.Name = "btnRun";
+            btnRun.Size = new Size(36, 36);
+            btnRun.Click += пускToolStripMenuItem_Click;
+            // 
+            // comboRegexSelection
+            // 
+            comboRegexSelection.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboRegexSelection.Items.AddRange(new object[] { "Задача 1: Формат имени файла", "Задача 2: Поиск слов >4 символов с подстрокой \"чай\"", "Задача 3: Адрес IPv4 (адрес+маска+порт)" });
+            comboRegexSelection.Name = "comboRegexSelection";
+            comboRegexSelection.Size = new Size(250, 39);
+            comboRegexSelection.Click += comboRegexSelection_Click;
+            // 
+            // btnHelp
+            // 
+            btnHelp.Alignment = ToolStripItemAlignment.Right;
+            btnHelp.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnHelp.Image = (Image)resources.GetObject("btnHelp.Image");
+            btnHelp.Name = "btnHelp";
+            btnHelp.Size = new Size(36, 36);
+            btnHelp.Click += вызовСправкиToolStripMenuItem_Click;
+            // 
+            // btnAbout
+            // 
+            btnAbout.Alignment = ToolStripItemAlignment.Right;
+            btnAbout.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            btnAbout.Image = (Image)resources.GetObject("btnAbout.Image");
+            btnAbout.Name = "btnAbout";
+            btnAbout.Size = new Size(36, 36);
+            btnAbout.Click += оПрограммеToolStripMenuItem_Click;
+            // 
+            // statusStrip1
+            // 
+            statusStrip1.Items.AddRange(new ToolStripItem[] { lblStatusPath });
+            statusStrip1.Location = new Point(0, 438);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(900, 22);
+            statusStrip1.TabIndex = 3;
+            // 
+            // lblStatusPath
+            // 
+            lblStatusPath.Name = "lblStatusPath";
+            lblStatusPath.Size = new Size(111, 17);
+            lblStatusPath.Text = "Путь не определен";
             // 
             // splitContainer1
             // 
-            splitContainer1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            splitContainer1.Dock = DockStyle.Fill;
             splitContainer1.Location = new Point(0, 63);
             splitContainer1.Name = "splitContainer1";
             splitContainer1.Orientation = Orientation.Horizontal;
@@ -572,52 +433,79 @@
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(tabControl1);
-            splitContainer1.Size = new Size(800, 398);
-            splitContainer1.SplitterDistance = 164;
+            splitContainer1.Panel2.Controls.Add(dataGridView1);
+            splitContainer1.Size = new Size(900, 375);
+            splitContainer1.SplitterDistance = 200;
             splitContainer1.TabIndex = 4;
             // 
-            // dataGridViewTextBoxColumn1
+            // richTextBox1
             // 
-            dataGridViewTextBoxColumn1.HeaderText = "Неверный фрагмент";
-            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            richTextBox1.Dock = DockStyle.Fill;
+            richTextBox1.Location = new Point(0, 0);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(900, 200);
+            richTextBox1.TabIndex = 0;
+            richTextBox1.Text = "";
+            richTextBox1.TextChanged += richTextBox1_TextChanged;
             // 
-            // dataGridViewTextBoxColumn2
+            // dataGridView1
             // 
-            dataGridViewTextBoxColumn2.HeaderText = "Местоположение";
-            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colSubstring, colPosition, colLength });
+            dataGridView1.Dock = DockStyle.Fill;
+            dataGridView1.Location = new Point(0, 0);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.ReadOnly = true;
+            dataGridView1.RowHeadersVisible = false;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.Size = new Size(900, 171);
+            dataGridView1.TabIndex = 0;
+            dataGridView1.CellClick += dataGridView1_CellClick;
             // 
-            // dataGridViewTextBoxColumn3
+            // colSubstring
             // 
-            dataGridViewTextBoxColumn3.HeaderText = "Описание ошибки";
-            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            colSubstring.HeaderText = "Найденная подстрока";
+            colSubstring.Name = "colSubstring";
+            colSubstring.ReadOnly = true;
+            // 
+            // colPosition
+            // 
+            colPosition.HeaderText = "Начальная позиция";
+            colPosition.Name = "colPosition";
+            colPosition.ReadOnly = true;
+            // 
+            // colLength
+            // 
+            colLength.HeaderText = "Длина";
+            colLength.Name = "colLength";
+            colLength.ReadOnly = true;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 461);
+            ClientSize = new Size(900, 460);
             Controls.Add(splitContainer1);
+            Controls.Add(statusStrip1);
             Controls.Add(toolStrip1);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
-            MinimumSize = new Size(816, 500);
             Name = "Form1";
-            Text = "Form1";
+            Text = "Compiler";
             Load += Form1_Load;
-            tabControl1.ResumeLayout(false);
-            tabPage1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            tabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgvErrors).EndInit();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -641,45 +529,41 @@
         private ToolStripMenuItem выделитьВсToolStripMenuItem;
         private ToolStripMenuItem текстToolStripMenuItem;
         private ToolStripMenuItem постановкаЗадачиToolStripMenuItem;
+        private ToolStripMenuItem пускToolStripMenuItem;
+        private ToolStripMenuItem справкаToolStripMenuItem;
+        private ToolStripMenuItem вызовСправкиToolStripMenuItem;
+        private ToolStripMenuItem оПрограммеToolStripMenuItem;
+        private ToolStrip toolStrip1;
+        private ToolStripButton btnNew;
+        private ToolStripButton btnOpen;
+        private ToolStripButton btnSave;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripButton btnUndo;
+        private ToolStripButton btnRedo;
+        private ToolStripButton btnCopy;
+        private ToolStripButton btnCut;
+        private ToolStripButton btnPaste;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripButton btnRun;
+        private ToolStripComboBox comboRegexSelection;
+        private ToolStripButton btnHelp;
+        private ToolStripButton btnAbout;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel lblStatusPath;
+        private SplitContainer splitContainer1;
+        private RichTextBox richTextBox1;
+        private DataGridView dataGridView1;
+        private DataGridViewTextBoxColumn colSubstring;
+        private DataGridViewTextBoxColumn colPosition;
+        private DataGridViewTextBoxColumn colLength;
+        private ToolStripMenuItem вызовСправкиToolStripMenuItem1;
+        private ToolStripMenuItem оПрограммеToolStripMenuItem1;
+        private ToolStripMenuItem постановкаЗадачиToolStripMenuItem1;
         private ToolStripMenuItem грамматикаToolStripMenuItem;
         private ToolStripMenuItem классификацияГрамматикиToolStripMenuItem;
         private ToolStripMenuItem методАнализаToolStripMenuItem;
         private ToolStripMenuItem тестовыйПримерToolStripMenuItem;
-        private ToolStripMenuItem списокЛитераторыToolStripMenuItem;
-        private ToolStripMenuItem пускToolStripMenuItem;
-        private ToolStripMenuItem справкаToolStripMenuItem;
-        private ToolStripMenuItem исходныйКодлToolStripMenuItem;
-        private ToolStripMenuItem вызовСправкиToolStripMenuItem;
-        private ToolStripMenuItem оПрограммеToolStripMenuItem;
-        private RichTextBox richTextBox1;
-        private ToolStrip toolStrip1;
-        private ToolStripButton toolStripButton1;
-        private ToolStripButton toolStripButton2;
-        private ToolStripButton toolStripButton3;
-        private ToolStripButton toolStripButton4;
-        private ToolStripButton toolStripButton5;
-        private ToolStripButton toolStripButton6;
-        private ToolStripButton toolStripButton7;
-        private ToolStripButton toolStripButton8;
-        private ToolStripButton toolStripButton9;
-        private ToolStripButton toolStripButton10;
-        private ToolStripButton toolStripButton11;
-        private SplitContainer splitContainer1;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.TabControl tabControl1;
-        private TabPage tabPage1;
-        private TabPage tabPage2;
-        private System.Windows.Forms.Label lblErrCount;
-        private DataGridView dataGridView1;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn10;
-        private DataGridView dgvErrors;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn11;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn12;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn13;
+        private ToolStripMenuItem списокЛитературыToolStripMenuItem;
+        private ToolStripMenuItem исходныйКодПрограммыToolStripMenuItem;
     }
 }

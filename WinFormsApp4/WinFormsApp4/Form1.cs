@@ -1,12 +1,14 @@
-using System.Threading.Channels;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
+using System.Text.RegularExpressions; 
 
 namespace WinFormsApp4
 {
     public partial class Form1 : Form
     {
-
         private string filePath = "";
         private bool changed = false;
 
@@ -14,30 +16,42 @@ namespace WinFormsApp4
         private Stack<string> redoStack = new Stack<string>();
         private bool isOperating = false;
 
-        private List<Token> lastAnalysisResults = new List<Token>();
-
         public Form1()
         {
             InitializeComponent();
-
-
             this.Text = "Новый документ — Редактор";
             richTextBox1.Visible = false;
-
             undoStack.Push("");
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
 
         }
+
+        private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.SelectedText = "";
+        }
+
+        private void постановкаЗадачиToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            MessageBox.Show("Здесь будет текст вашей задачи.");
+        }
+
+
+        private void dgvErrors_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
 
         private void ShowEditor()
         {
-            if (!richTextBox1.Visible)
-            {
-                richTextBox1.Visible = true;
-            }
+            if (!richTextBox1.Visible) richTextBox1.Visible = true;
         }
 
-        //вспомогательные методы для работы с файлом
-        #region 
+        #region Файловые операции
         private void Save()
         {
             if (string.IsNullOrEmpty(filePath)) SaveAs();
@@ -60,6 +74,7 @@ namespace WinFormsApp4
                 }
             }
         }
+
         private bool Confirm()
         {
             if (!changed) return true;
@@ -67,18 +82,13 @@ namespace WinFormsApp4
             if (res == DialogResult.Yes) { Save(); return !changed; }
             return res == DialogResult.No;
         }
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (!Confirm())
-            {
-                e.Cancel = true;
-            }
+            if (!Confirm()) e.Cancel = true;
             base.OnFormClosing(e);
         }
-        #endregion 
 
-        //реализация кнопок работы с файлами
-        #region 
         private void создатьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Confirm())
@@ -105,337 +115,245 @@ namespace WinFormsApp4
             }
         }
 
-        private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(filePath)) сохранитьКакToolStripMenuItem_Click(sender, e);
-            else
-            {
-                File.WriteAllText(filePath, richTextBox1.Text);
-                changed = false;
-            }
-        }
-
-        private void сохранитьКакToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (SaveFileDialog sfd = new SaveFileDialog { Filter = "Текстовые файлы|*.txt" })
-            {
-                if (sfd.ShowDialog() == DialogResult.OK)
-                {
-                    filePath = sfd.FileName;
-                    File.WriteAllText(filePath, richTextBox1.Text);
-                    changed = false;
-                }
-            }
-        }
-        private void выходToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-            создатьToolStripMenuItem_Click(sender, e);
-        }
-        private void toolStripButton2_Click(object sender, EventArgs e)
-        {
-            открытьToolStripMenuItem_Click(sender, e);
-        }
-        private void toolStripButton3_Click(object sender, EventArgs e)
-        {
-            сохранитьToolStripMenuItem_Click(sender, e);
-        }
+        private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e) => Save();
+        private void сохранитьКакToolStripMenuItem_Click_1(object sender, EventArgs e) => SaveAs();
+        private void выходToolStripMenuItem_Click(object sender, EventArgs e) => this.Close();
         #endregion
 
-        //работа с разделом правки
-        #region
+        #region Правка (Undo/Redo, Буфер)
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
             changed = true;
-
             if (!isOperating)
             {
                 if (redoStack.Count > 0) redoStack.Clear();
                 if (undoStack.Count == 0 || richTextBox1.Text != undoStack.Peek())
-                {
                     undoStack.Push(richTextBox1.Text);
-                }
             }
         }
+
         private void отменитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (undoStack.Count > 1)
             {
                 isOperating = true;
                 redoStack.Push(undoStack.Pop());
-
                 richTextBox1.Text = undoStack.Peek();
-
                 richTextBox1.SelectionStart = richTextBox1.Text.Length;
-
                 isOperating = false;
             }
         }
-
 
         private void вернутьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (redoStack.Count > 0)
             {
                 isOperating = true;
-
                 string state = redoStack.Pop();
                 undoStack.Push(state);
-
                 richTextBox1.Text = state;
-
                 richTextBox1.SelectionStart = richTextBox1.Text.Length;
-
                 isOperating = false;
             }
         }
 
-        private void вырезатьToolStripMenuItem_Click(object sender, EventArgs e)
+
+
+        private void вырезатьToolStripMenuItem_Click(object sender, EventArgs e) { if (richTextBox1.SelectionLength > 0) richTextBox1.Cut(); }
+        private void копироватьToolStripMenuItem_Click(object sender, EventArgs e) { if (richTextBox1.SelectionLength > 0) richTextBox1.Copy(); }
+        private void вставитьToolStripMenuItem_Click(object sender, EventArgs e) { if (Clipboard.ContainsText()) richTextBox1.Paste(); }
+        private void выделитьВсToolStripMenuItem_Click(object sender, EventArgs e) => richTextBox1.SelectAll();
+        #endregion
+
+        #region Поиск подстрок (ЛР 4)
+        private void пускToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (richTextBox1.SelectionLength > 0) richTextBox1.Cut();
+            if (comboRegexSelection.SelectedIndex == -1)
+            {
+                MessageBox.Show("Пожалуйста, выберите задачу!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string pattern = "";
+            switch (comboRegexSelection.SelectedIndex)
+            {
+                case 0:
+                    pattern = @"\b[\w\-]+\.(?:doc|docx|pdf|jpg|jpeg|png|gif)\b";
+                    break;
+                case 1:
+                    pattern = @"\b(?=[а-яА-ЯёЁ]{5,})[а-яА-ЯёЁ]*чай[а-яА-ЯёЁ]*\b";
+                    break;
+                case 2:
+                    pattern = @"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/(?:[0-9]|[1-2][0-9]|3[0-2])(?::(?:[0-9]|[1-9][0-9]{1,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?\b";
+                    break;
+            }
+
+            try
+            {
+                dataGridView1.Rows.Clear();
+                MatchCollection matches = Regex.Matches(richTextBox1.Text, pattern, RegexOptions.IgnoreCase);
+
+                if (matches.Count == 0)
+                {
+                    MessageBox.Show("Совпадений не найдено.", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                foreach (Match match in matches)
+                {
+                    dataGridView1.Rows.Add(match.Value, match.Index, match.Length);
+                }
+
+                int totalRowIndex = dataGridView1.Rows.Add("Общее количество совпадений:", matches.Count.ToString(), "");
+
+                dataGridView1.Rows[totalRowIndex].DefaultCellStyle.BackColor = Color.LightGray;
+                dataGridView1.Rows[totalRowIndex].DefaultCellStyle.Font = new Font(dataGridView1.Font, FontStyle.Bold);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private void копироватьToolStripMenuItem_Click(object sender, EventArgs e)
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (richTextBox1.SelectionLength > 0) richTextBox1.Copy();
-        }
-
-        private void вставитьToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Clipboard.ContainsText()) richTextBox1.Paste();
-        }
-
-        private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            richTextBox1.SelectedText = "";
-        }
-
-        private void выделитьВсToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            richTextBox1.SelectAll();
-        }
-
-        private void toolStripButton4_Click(object sender, EventArgs e)
-        {
-            отменитьToolStripMenuItem_Click(sender, e);
-        }
-
-        private void toolStripButton5_Click(object sender, EventArgs e)
-        {
-            вернутьToolStripMenuItem_Click(sender, e);
-        }
-        private void toolStripButton6_Click(object sender, EventArgs e)
-        {
-            копироватьToolStripMenuItem_Click(sender, e);
-        }
-
-        private void toolStripButton7_Click(object sender, EventArgs e)
-        {
-            вырезатьToolStripMenuItem_Click(sender, e);
-        }
-
-        private void toolStripButton8_Click(object sender, EventArgs e)
-        {
-            вставитьToolStripMenuItem_Click(sender, e);
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridView1.Rows.Count - 1) 
+            {
+                if (int.TryParse(dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString(), out int start) &&
+                    int.TryParse(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString(), out int length))
+                {
+                    richTextBox1.Focus();
+                    richTextBox1.Select(start, length);
+                    richTextBox1.ScrollToCaret();
+                }
+            }
         }
         #endregion
-        //вывод справочных окон
-        #region
-        private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
+
+        #region Справка и прочее
+        private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e) => new Form2().ShowDialog();
+        private void вызовСправкиToolStripMenuItem_Click(object sender, EventArgs e) => new Form3().ShowDialog();
+        private void toolStripButton1_Click(object sender, EventArgs e) => создатьToolStripMenuItem_Click(sender, e);
+        private void toolStripButton9_Click(object sender, EventArgs e) => пускToolStripMenuItem_Click(sender, e);
+        #endregion
+
+
+        private void справкаToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form2 aboutForm = new Form2();
-            aboutForm.ShowDialog();
         }
 
-        private void toolStripButton11_Click(object sender, EventArgs e)
+        private void вернутьToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            оПрограммеToolStripMenuItem_Click(sender, e);
+            if (redoStack.Count > 0)
+            {
+                isOperating = true;
+                string state = redoStack.Pop();
+                undoStack.Push(state);
+                richTextBox1.Text = state;
+                richTextBox1.SelectionStart = richTextBox1.Text.Length;
+                isOperating = false;
+            }
         }
 
-        private void вызовСправкиToolStripMenuItem_Click(object sender, EventArgs e)
+        private void вызовСправкиToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             Form3 aboutForm = new Form3();
             aboutForm.ShowDialog();
         }
 
-        private void toolStripButton10_Click(object sender, EventArgs e)
+        private void оПрограммеToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            вызовСправкиToolStripMenuItem_Click(sender, e);
-        }
-        #endregion
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
+            Form2 aboutForm = new Form2();
+            aboutForm.ShowDialog();
         }
 
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void вырезатьToolStripMenuItem_Click_2(object sender, EventArgs e)
         {
-
+            if (richTextBox1.SelectionLength > 0) richTextBox1.Cut();
         }
 
-        private void toolStripButton9_Click(object sender, EventArgs e)
+        private void копироватьToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            пускToolStripMenuItem_Click(sender, e);
+            if (richTextBox1.SelectionLength > 0) richTextBox1.Copy();
         }
 
-        private void пускToolStripMenuItem_Click(object sender, EventArgs e)
+        private void вставитьToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(richTextBox1.Text))
-                {
-                    MessageBox.Show("Введите код для анализа", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                dataGridView1.Rows.Clear();
-                dgvErrors.Rows.Clear();
-
-                Scanner scanner = new Scanner();
-                List<Token> tokens = scanner.Analyze(richTextBox1.Text);
-
-                foreach (var t in tokens)
-                {
-                    int rowIdx = dataGridView1.Rows.Add(t.Code, t.Type, t.Lexeme, $"Л:{t.Line} П:{t.StartPos}");
-                    dataGridView1.Rows[rowIdx].Tag = t;
-                }
-
-                Parser parser = new Parser(tokens);
-                parser.Parse();
-
-                if (parser.SyntaxErrors != null)
-                {
-                    foreach (var err in parser.SyntaxErrors)
-                    {
-                        int rowIdx = dgvErrors.Rows.Add(err.Lexeme, $"Стр:{err.Line}, Поз:{err.StartPos}", err.Type);
-                        dgvErrors.Rows[rowIdx].Tag = err;
-                    }
-                }
-
-                int errorCount = parser.SyntaxErrors?.Count ?? 0;
-
-                if (lblErrCount != null)
-                {
-                    lblErrCount.Text = $"Общее количество ошибок: {errorCount}";
-                    lblErrCount.ForeColor = errorCount > 0 ? Color.Red : Color.Green;
-                }
-
-                if (tabControl1 != null)
-                {
-                    if (errorCount > 0)
-                    {
-                        tabControl1.SelectedIndex = 1;
-                    }
-                    else
-                    {
-                        tabControl1.SelectedIndex = 0;
-                        MessageBox.Show("Синтаксических ошибок не обнаружено!", "Анализ завершен", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Критическая ошибка при анализе: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
+            if (Clipboard.ContainsText()) richTextBox1.Paste();
         }
 
-        private void dgvErrors_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void удалитьToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            if (e.RowIndex >= 0 && dgvErrors.Rows[e.RowIndex].Tag is Token err)
-            {
-                try
-                {
-                    int lineStartIndex = richTextBox1.GetFirstCharIndexFromLine(err.Line - 1);
-                    if (lineStartIndex == -1) return;
-
-                    int globalSelectionStart = lineStartIndex + err.StartPos;
-                    int length = err.Lexeme.Length;
-
-                    richTextBox1.Focus();
-                    if (globalSelectionStart >= 0 && globalSelectionStart + length <= richTextBox1.Text.Length)
-                    {
-                        richTextBox1.Select(globalSelectionStart, length);
-                        richTextBox1.ScrollToCaret();
-                    }
-                }
-                catch { }
-            }
-        }
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && dataGridView1.Rows[e.RowIndex].Tag is Token t)
-            {
-                try
-                {
-                    int lineStartIndex = richTextBox1.GetFirstCharIndexFromLine(t.Line - 1);
-                    if (lineStartIndex == -1) return;
-
-                    int globalSelectionStart = lineStartIndex + t.StartPos;
-                    int length = t.Lexeme.Length;
-
-                    richTextBox1.Focus();
-                    if (globalSelectionStart >= 0 && globalSelectionStart + length <= richTextBox1.Text.Length)
-                    {
-                        richTextBox1.Select(globalSelectionStart, length);
-                        richTextBox1.ScrollToCaret();
-                    }
-                }
-                catch { }
-            }
+            richTextBox1.SelectedText = "";
         }
 
-        private void постановкаЗадачиToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void выделитьВсToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            richTextBox1.SelectAll();
+        }
+
+        private void btnCopy_Click(object sender, EventArgs e)
+        {
+            if (richTextBox1.SelectionLength > 0) richTextBox1.Copy();
+        }
+
+        private void btnCut_Click(object sender, EventArgs e)
+        {
+            if (richTextBox1.SelectionLength > 0) richTextBox1.Cut();
+        }
+
+        private void btnPaste_Click(object sender, EventArgs e)
+        {
+            if (Clipboard.ContainsText()) richTextBox1.Paste();
+        }
+
+        private void постановкаЗадачиToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             var info = new InfoForm("Постановка задачи", "Task.html");
             info.ShowDialog();
         }
 
-        private void грамматикаToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void грамматикаToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var info = new InfoForm("Грамматика", "Grammar.html");
             info.ShowDialog();
         }
 
-        private void классификацияГрамматикиToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {   
+        private void классификацияГрамматикиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             var info = new InfoForm("Классификация грамматики", "Classification.html");
             info.ShowDialog();
-
         }
 
-        private void методАнализаToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void методАнализаToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var info = new InfoForm("Метод анализа", "Method.html");
             info.ShowDialog();
         }
 
-        private void тестовыйПримерToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void тестовыйПримерToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var info = new InfoForm("Тестовый пример", "Tests.html");
             info.ShowDialog();
         }
 
-        private void списокЛитераторыToolStripMenuItem_Click(object sender, EventArgs e)
+        private void списокЛитературыToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var info = new InfoForm("Список литературы", "References.html");
             info.ShowDialog();
         }
-        private void исходныйКодлToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void исходныйКодПрограммыToolStripMenuItem_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
             {
                 FileName = "https://github.com/GodwynCornelia/TFLandC/blob/main/README.md",
                 UseShellExecute = true
             });
+        }
+
+        private void comboRegexSelection_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
