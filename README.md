@@ -308,4 +308,4 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 <br><br>
 
 ### Граф автомата для второга варинта
-<img width="822" height="651" alt="схема доп 4 лаба" src="https://github.com/user-attachments/assets/8d4c8f26-3179-45f6-a894-ab905ca9f3ed" /><br><br>
+![](READMEpicture/2задание_граф.png)
