@@ -51,7 +51,6 @@ namespace WinFormsApp4
             if (!richTextBox1.Visible) richTextBox1.Visible = true;
         }
 
-        #region Файловые операции
         private void Save()
         {
             if (string.IsNullOrEmpty(filePath)) SaveAs();
@@ -118,9 +117,9 @@ namespace WinFormsApp4
         private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e) => Save();
         private void сохранитьКакToolStripMenuItem_Click_1(object sender, EventArgs e) => SaveAs();
         private void выходToolStripMenuItem_Click(object sender, EventArgs e) => this.Close();
-        #endregion
 
-        #region Правка (Undo/Redo, Буфер)
+
+
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
             changed = true;
@@ -163,9 +162,65 @@ namespace WinFormsApp4
         private void копироватьToolStripMenuItem_Click(object sender, EventArgs e) { if (richTextBox1.SelectionLength > 0) richTextBox1.Copy(); }
         private void вставитьToolStripMenuItem_Click(object sender, EventArgs e) { if (Clipboard.ContainsText()) richTextBox1.Paste(); }
         private void выделитьВсToolStripMenuItem_Click(object sender, EventArgs e) => richTextBox1.SelectAll();
-        #endregion
 
-        #region Поиск подстрок (ЛР 4)
+
+        private bool IsTeaAutomatonMatch(string word)
+        {
+            if (string.IsNullOrEmpty(word) || word.Length < 5) return false;
+
+            int state = 0;
+            string lowerWord = word.ToLower();
+
+            foreach (char c in lowerWord)
+            {
+                switch (state)
+                {
+                    case 0: 
+                        if (c == 'ч') state = 1;
+                        else state = 10;
+                        break;
+
+                    case 1: if (c == 'а') state = 2; else state = 5; break;
+                    case 2: if (c == 'й') state = 3; else state = 5; break;
+                    case 3: state = 4; break;
+                    case 4: state = 100; break;
+
+                    case 5: if (c == 'ч') state = 6; else state = 11; break;
+                    case 6: if (c == 'а') state = 7; else state = 11; break;
+                    case 7: if (c == 'й') state = 8; else state = 11; break;
+                    case 8: state = 100; break;
+
+                    case 10:
+                        if (c == 'ч') state = 12;
+                        else state = 11;
+                        break;
+
+                    case 11:
+                        if (c == 'ч') state = 12;
+                        else state = 11;
+                        break;
+
+                    case 12:
+                        if (c == 'а') state = 13;
+                        else if (c == 'ч') state = 12; 
+                        else state = 11; 
+                        break;
+
+                    case 13:
+                        if (c == 'й') state = 100; 
+                        else if (c == 'ч') state = 12;
+                        else state = 11;
+                        break;
+
+                    case 100:
+                        state = 100;
+                        break;
+                }
+            }
+
+            return state == 100;
+        }
+        #region Поиск подстрок
         private void пускToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (comboRegexSelection.SelectedIndex == -1)
@@ -174,45 +229,73 @@ namespace WinFormsApp4
                 return;
             }
 
+            dataGridView1.Rows.Clear();
+            string text = richTextBox1.Text;
+
+            if (comboRegexSelection.SelectedIndex == 1)
+            {
+                string[] allWords = text.Split(new char[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                int count = 0;
+                int lastFoundIndex = 0;
+
+                foreach (string w in allWords)
+                {
+                    string cleanWord = w.Trim(new char[] { '.', ',', '!', '?', ':', ';', '(', ')' });
+
+                    if (IsTeaAutomatonMatch(cleanWord))
+                    {
+                        int index = text.IndexOf(w, lastFoundIndex);
+                        if (index != -1)
+                        {
+                            dataGridView1.Rows.Add(cleanWord, index, cleanWord.Length);
+                            lastFoundIndex = index + w.Length;
+                            count++;
+                        }
+                    }
+                }
+
+                if (count == 0)
+                {
+                    MessageBox.Show("Совпадений не найдено.", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    int rowIndex = dataGridView1.Rows.Add("Общее количество (Автомат):", count.ToString(), "");
+                    dataGridView1.Rows[rowIndex].DefaultCellStyle.BackColor = Color.LightGreen;
+                }
+                return;
+            }
+
             string pattern = "";
             switch (comboRegexSelection.SelectedIndex)
             {
-                case 0:
-                    pattern = @"\b[\w\-]+\.(?:doc|docx|pdf|jpg|jpeg|png|gif)\b";
-                    break;
-                case 1:
-                    pattern = @"\b(?=[а-яА-ЯёЁ]{5,})[а-яА-ЯёЁ]*чай[а-яА-ЯёЁ]*\b";
-                    break;
-                case 2:
-                    pattern = @"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/(?:[0-9]|[1-2][0-9]|3[0-2])(?::(?:[0-9]|[1-9][0-9]{1,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?\b";
-                    break;
+                case 0: pattern = @"\b[\w\-]+\.(?:doc|docx|pdf|jpg|jpeg|png|gif)\b"; break;
+                case 2: pattern = @"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/(?:[0-9]|[1-2][0-9]|3[0-2])(?::\d+)?\b"; break;
             }
 
             try
             {
-                dataGridView1.Rows.Clear();
-                MatchCollection matches = Regex.Matches(richTextBox1.Text, pattern, RegexOptions.IgnoreCase);
-
+                MatchCollection matches = Regex.Matches(text, pattern, RegexOptions.IgnoreCase);
                 if (matches.Count == 0)
                 {
-                    MessageBox.Show("Совпадений не найдено.", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Совпадений не найдено.");
                     return;
                 }
+
                 foreach (Match match in matches)
                 {
                     dataGridView1.Rows.Add(match.Value, match.Index, match.Length);
                 }
 
-                int totalRowIndex = dataGridView1.Rows.Add("Общее количество совпадений:", matches.Count.ToString(), "");
-
-                dataGridView1.Rows[totalRowIndex].DefaultCellStyle.BackColor = Color.LightGray;
-                dataGridView1.Rows[totalRowIndex].DefaultCellStyle.Font = new Font(dataGridView1.Font, FontStyle.Bold);
+                int totalRow = dataGridView1.Rows.Add("Общее количество:", matches.Count.ToString(), "");
+                dataGridView1.Rows[totalRow].DefaultCellStyle.BackColor = Color.LightGreen;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ошибка: {ex.Message}");
             }
         }
+        #endregion
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -227,7 +310,6 @@ namespace WinFormsApp4
                 }
             }
         }
-        #endregion
 
         #region Справка и прочее
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e) => new Form2().ShowDialog();
