@@ -308,7 +308,7 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 <br><br>
 
 ### Граф автомата для второга варинта
-![](READMEpicture/граф_автомата.png)
+![](READMEpicture/граф_автомата1.png)
 
 ### Примеры с интегрированным автоматом
 #### Примеры найденных слов:
