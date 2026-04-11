@@ -182,8 +182,8 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 ### Разработка грамматики
 
 <div>
-    <p>G[Z]={Vt,Vn,Z,P}<br />Vt={ ' const ', ' : ',  ' &str ', 'space', ' = ', ' " ', ' ; ', '_' , a...z, A...Z, 0...9, '!','?',...}<br />Vstr=Vt\{' " '}<br />Vn={Z,  ID, Bodystring, IDRest,BodyStringRest,IDStart, BodyStringStart, QuoteOpen, CloseQuote,BodyString, TypeStart, Letter, Digit, Char}</p>
-    <p>P = {<br />
+    <p>G[Z]={Vt,Vn,Z,P}<br />Vt={ ' const ', ' : ',  ' &str ', 'space', ' = ', ' " ', ' ; ', '_' , a...z, A...Z, 0...9, '!','?',...}<br />Vstr=Vt\{' " '}<br />Vn={Z,  ID, Space1, Eq, Bodystring, IDRest, IDStart, QuoteOpen, CloseQuote, TypeStart, Letter, Digit, Symbol}</p>
+    <p>P = {
     <li><span class="non-terminal">&lt;Z&gt;</span> &rarr; <span class="terminal">'const'</span> <span class="non-terminal">&lt;Space1&gt;</span></li>
     <li><span class="non-terminal">&lt;Space1&gt;</span> &rarr; <span class="terminal">' '</span> <span class="non-terminal">&lt;IDStart&gt;</span></li>
     <li><span class="non-terminal">&lt;IDStart&gt;</span> &rarr; <span class="terminal">'_'</span> <span class="non-terminal">&lt;IDRest&gt;</span> | <span class="non-terminal">&lt;Letter&gt;</span> <span class="non-terminal">&lt;IDRest&gt;</span></li>
@@ -191,12 +191,11 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
     <li><span class="non-terminal">&lt;TypeStart&gt;</span> &rarr; <span class="terminal">'&str'</span> <span class="non-terminal">&lt;Eq&gt;</span></li>
     <li><span class="non-terminal">&lt;Eq&gt;</span> &rarr; <span class="terminal">'='</span> <span class="non-terminal">&lt;QuateOpen&gt;</span></li>
     <li><span class="non-terminal">&lt;QuateOpen&gt;</span> &rarr; <span class="terminal">'"'</span> <span class="non-terminal">&lt;BodyString&gt;</span></li>
-    <li><span class="non-terminal">&lt;BodyString&gt;</span> &rarr; <span class="non-terminal">&lt;Char&gt;</span> <span class="non-terminal">&lt;BodyStringRest&gt;</span> | <span class="terminal">'"'</span> <span class="non-terminal">&lt;CloseQuote&gt;</span></li>
-    <li><span class="non-terminal">&lt;BodyStringRest&gt;</span> &rarr; <span class="non-terminal">&lt;Char&gt;</span> <span class="non-terminal">&lt;BodyStringRest&gt;</span> | <span class="terminal">'"'</span> <span class="non-terminal">&lt;CloseQuote&gt;</span></li>
+    <li><span class="non-terminal">&lt;BodyString&gt;</span> &rarr; <span class="non-terminal">&lt;Letter&gt;</span> <span class="non-terminal">&lt;BodyString&gt;</span> | <span class="non-terminal">&lt;Digit&gt;</span> <span class="non-terminal">&lt;BodyString&gt;</span> | <span class="non-terminal">&lt;Symbol&gt;</span> <span class="non-terminal">&lt;BodyString&gt;</span> | <span class="terminal">'"'</span> <span class="non-terminal">&lt;CloseQuote&gt;</span></li>
     <li><span class="non-terminal">&lt;CloseQuote&gt;</span> &rarr; <span class="terminal">';'</span> <span class="terminal">END</span></li>
     <li><span class="non-terminal">&lt;Letter&gt;</span> &rarr; <span class="terminal">'a'</span> | <span class="terminal">'b'</span> | ... | <span class="terminal">'Z'</span></li>
     <li><span class="non-terminal">&lt;Digit&gt;</span> &rarr; <span class="terminal">'0'</span> | <span class="terminal">'1'</span> | ... | <span class="terminal">'9'</span></li>
-    <li><span class="non-terminal">&lt;Char&gt;</span> &rarr; <span class="terminal">V<sub>str</sub></span></li>
+    <li><span class="non-terminal">&lt;Symbol&gt;</span> &rarr; <span class="terminal">'!'</span> | <span class="terminal">'?'</span> | <span class="terminal">'_'</span> | ... <span class="comment">(любой печатный символ, кроме ")</span></li>
 }</p>
 </div>
 
@@ -207,7 +206,7 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 ### Метод анализа
 
 Граф конечного автомата
-![Диаграмма состояний](READMEpicture/Грамматика.png)
+![Диаграмма состояний](READMEpicture/Граф_3лб.png)
 
 ### Диагностика и нейтрализация синтаксических ошибок
 
