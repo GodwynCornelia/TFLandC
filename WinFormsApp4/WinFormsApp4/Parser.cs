@@ -23,39 +23,27 @@ namespace WinFormsApp4
 
             while (_index < _tokens.Count)
             {
-                if (_tokens[_index].Code == 1 || _tokens[_index].Code == 2)
+                foreach (int expectedCode in _sequence)
                 {
-                    ParseConstantDeclaration();
-                }
-                else
-                {
-                    AddError(_tokens[_index], $"Лишний фрагмент вне инструкции: '{_tokens[_index].Lexeme}'");
-                    _index++;
+                    if (_index >= _tokens.Count)
+                    {
+                        if (expectedCode != 1)
+                            AddError(null, $"Ожидалось {GetDesc(expectedCode)}, но достигнут конец файла");
+                        continue;
+                    }
+
+                    if (!ProcessStep(expectedCode))
+                    {
+                        if (_index < _tokens.Count && _tokens[_index].Code == 1 && expectedCode != 1)
+                            break;
+                    }
                 }
             }
         }
 
-        private void ParseConstantDeclaration()
-        {
-            foreach (int code in _sequence)
-            {
-                if (_index >= _tokens.Count)
-                {
-                    AddError(null, $"Ожидалось {GetDesc(code)}, но достигнут конец файла");
-                    break;
-                }
-
-                if (!Expect(code))
-                {
-                    if (_index < _tokens.Count && _tokens[_index].Code == 1 && code != 1) break;
-                }
-            }
-        }
-
-        private bool Expect(int expectedCode)
+        private bool ProcessStep(int expectedCode)
         {
             if (_index >= _tokens.Count) return false;
-
             Token current = _tokens[_index];
 
             if (current.Code == expectedCode)
@@ -64,23 +52,26 @@ namespace WinFormsApp4
                 return true;
             }
 
-            AddError(current, $"Ожидалось {GetDesc(expectedCode)}, найдено '{current.Lexeme}'");
-
-            int currentStepIdx = Array.IndexOf(_sequence, expectedCode);
-            for (int i = currentStepIdx + 1; i < _sequence.Length; i++)
+            if (IsFutureAnchor(current.Code, expectedCode))
             {
-                if (current.Code == _sequence[i])
-                {
-                    return false;
-                }
+                AddError(current, $"Пропущено {GetDesc(expectedCode)}");
+                return false;
             }
 
-            if (current.Code != 8 && current.Code != 1)
-            {
-                _index++;
-                return Expect(expectedCode);
-            }
+            AddError(current, $"Лишний фрагмент: '{current.Lexeme}'. Ожидалось {GetDesc(expectedCode)}");
+            _index++;
 
+            return ProcessStep(expectedCode);
+        }
+
+        private bool IsFutureAnchor(int currentCode, int expectedCode)
+        {
+            int startIdx = Array.IndexOf(_sequence, expectedCode);
+            if (startIdx == -1) return false;
+            for (int i = startIdx + 1; i < _sequence.Length; i++)
+            {
+                if (_sequence[i] == currentCode) return true;
+            }
             return false;
         }
 
@@ -93,7 +84,7 @@ namespace WinFormsApp4
                 5 => "Разделитель ':'",
                 3 => "Тип данных '&str'",
                 6 => "Оператор '='",
-                7 => "Строковое значение",
+                7 => "Строковое значение BodyString",
                 8 => "Завершающая ';'",
                 _ => "неизвестный элемент"
             };
