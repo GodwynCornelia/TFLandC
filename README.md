@@ -182,7 +182,7 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 ### Разработка грамматики
 
 <div>
-    <p>G[Z]={Vt,Vn,Z,P}<br />Vt={ ' const ', ' : ',  ' &str ', 'space', ' = ', ' " ', ' ; ', '_' , a...z, A...Z, 0...9, '!','?',...}<br />Vstr=Vt\{' " '}<br />Vn={Z,  ID, Space1, Eq, Bodystring, IDRest, IDStart, QuoteOpen, CloseQuote, TypeStart, Letter, Digit, Symbol}</p>
+    <p>G[Z]={Vt,Vn,Z,P}<br />Vt={ ' const ', ' : ',  ' &str ', 'space', ' = ', ' " ', ' ; ', '_' , a...z, A...Z, 0...9, '!','?',...}<br />Vn={Z,  ID, Space1, Eq, Bodystring, IDRest, IDStart, QuoteOpen, CloseQuote, TypeStart, Letter, Digit, Symbol}</p>
     <p>P = {
     <li><span class="non-terminal">&lt;Z&gt;</span> &rarr; <span class="terminal">'const'</span> <span class="non-terminal">&lt;Space1&gt;</span></li>
     <li><span class="non-terminal">&lt;Space1&gt;</span> &rarr; <span class="terminal">' '</span> <span class="non-terminal">&lt;IDStart&gt;</span></li>
@@ -206,7 +206,7 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 ### Метод анализа
 
 Граф конечного автомата
-![Диаграмма состояний](READMEpicture/Граф_3лб.png)
+![Диаграмма состояний](READMEpicture/Граф_3лаба.png)
 
 ### Диагностика и нейтрализация синтаксических ошибок
 
