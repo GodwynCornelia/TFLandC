@@ -9,7 +9,8 @@ namespace WinFormsApp4
         private readonly List<Token> _tokens;
         private int _index = 0;
         public List<Token> SyntaxErrors { get; } = new List<Token>();
-        private readonly int[] _sequence = { 1, 2, 5, 3, 6, 7, 8 };
+
+        private readonly int[] _sequence = { 1, 2, 5, 3, 6, 7, 2, 7, 8 };
 
         public Parser(List<Token> tokens)
         {
@@ -23,8 +24,13 @@ namespace WinFormsApp4
 
             while (_index < _tokens.Count)
             {
+                bool constructionStarted = false;
+
                 foreach (int expectedCode in _sequence)
                 {
+                    if (_index < _tokens.Count && _tokens[_index].Code == 1)
+                        constructionStarted = true;
+
                     if (_index >= _tokens.Count)
                     {
                         if (expectedCode != 1)
@@ -38,6 +44,8 @@ namespace WinFormsApp4
                             break;
                     }
                 }
+
+                if (!constructionStarted && _index >= _tokens.Count) break;
             }
         }
 
@@ -52,13 +60,17 @@ namespace WinFormsApp4
                 return true;
             }
 
+            if (expectedCode == 2 && current.Code == 7)
+            {
+                return true;
+            }
+
             if (IsFutureAnchor(current.Code, expectedCode))
             {
                 AddError(current, $"Пропущено {GetDesc(expectedCode)}");
                 return false;
             }
-
-            AddError(current, $"Лишний фрагмент: '{current.Lexeme}'. Ожидалось {GetDesc(expectedCode)}");
+            AddError(current, $"Лишний элемент '{current.Lexeme}'. Ожидалось {GetDesc(expectedCode)}");
             _index++;
 
             return ProcessStep(expectedCode);
@@ -68,6 +80,11 @@ namespace WinFormsApp4
         {
             int startIdx = Array.IndexOf(_sequence, expectedCode);
             if (startIdx == -1) return false;
+
+            if (expectedCode == 3 && currentCode == 2) return false;
+
+            if (expectedCode == 2 && currentCode == 7) return false;
+
             for (int i = startIdx + 1; i < _sequence.Length; i++)
             {
                 if (_sequence[i] == currentCode) return true;
@@ -79,14 +96,14 @@ namespace WinFormsApp4
         {
             return code switch
             {
-                1 => "Ключевое слово 'const'",
-                2 => "Идентификатор (NAME)",
-                5 => "Разделитель ':'",
-                3 => "Тип данных '&str'",
-                6 => "Оператор '='",
-                7 => "Строковое значение BodyString",
-                8 => "Завершающая ';'",
-                _ => "неизвестный элемент"
+                1 => "const",
+                2 => "Имя или Текст",
+                5 => "':'",
+                3 => "'&str'",
+                6 => "'='",
+                7 => "кавычка '\"'",
+                8 => "';'",
+                _ => "элемент"
             };
         }
 
@@ -94,7 +111,7 @@ namespace WinFormsApp4
         {
             SyntaxErrors.Add(new Token
             {
-                Lexeme = t?.Lexeme ?? "EOF",
+                Lexeme = t?.Lexeme ?? " ",
                 Line = t?.Line ?? (_tokens.LastOrDefault()?.Line ?? 1),
                 StartPos = t?.StartPos ?? 0,
                 EndPos = t?.EndPos ?? 0,
