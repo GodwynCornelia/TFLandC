@@ -315,3 +315,7 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 
 - Тип узла: `ConstDeclStr`, `StrType`, `BodyString`, `type`.
 - Ключевые атрибуты узла: например `name`, `str`, `modifiers`.
+
+### Примеры (ДОП)   
+![](READMEpicture/верный.png)
+![](READMEpicture/AST.png)
