@@ -9,35 +9,71 @@ namespace WinFormsApp4
         private readonly List<Token> _tokens;
         private int _index = 0;
         public List<Token> SyntaxErrors { get; } = new List<Token>();
-        private readonly int[] _sequence = { 1, 2, 5, 3, 6, 7, 8 };
+
+        private readonly int[] _sequence = { 1, 2, 5, 3, 6, 7, 2, 7, 8 };
 
         public Parser(List<Token> tokens)
         {
             _tokens = tokens.Where(t => t.Code != 4).ToList();
         }
 
-        public void Parse()
+        public List<EnumDeclNode> Parse()
         {
             SyntaxErrors.Clear();
             _index = 0;
+            var astNodes = new List<EnumDeclNode>();
 
             while (_index < _tokens.Count)
             {
+                EnumDeclNode currentNode = new EnumDeclNode();
+                bool isValidLine = true;
+
                 foreach (int expectedCode in _sequence)
                 {
                     if (_index >= _tokens.Count)
                     {
                         if (expectedCode != 1)
                             AddError(null, $"Ожидалось {GetDesc(expectedCode)}, но достигнут конец файла");
+                        isValidLine = false;
                         continue;
                     }
 
-                    if (!ProcessStep(expectedCode))
+                    int oldIndex = _index;
+                    bool matched = ProcessStep(expectedCode);
+
+                    if (matched)
                     {
+                        Token matchedToken = _tokens[oldIndex];
+                        FillAstData(currentNode, matchedToken, expectedCode);
+                    }
+                    else
+                    {
+                        isValidLine = false;
                         if (_index < _tokens.Count && _tokens[_index].Code == 1 && expectedCode != 1)
                             break;
                     }
                 }
+
+                if (isValidLine && !string.IsNullOrEmpty(currentNode.Name))
+                {
+                    astNodes.Add(currentNode);
+                }
+            }
+            return astNodes;
+        }
+
+        private void FillAstData(EnumDeclNode node, Token t, int code)
+        {
+            if (code == 1) { node.Line = t.Line; node.Position = t.StartPos; }
+            if (code == 2 && node.Name == null)
+            {
+                node.Name = t.Lexeme;
+                return;
+            }
+            if (code == 2 && node.Name != null)
+            {
+                if (node.Cases.Count == 0)
+                    node.Cases.Add(new EnumCaseNode { Name = t.Lexeme });
             }
         }
 
@@ -58,9 +94,8 @@ namespace WinFormsApp4
                 return false;
             }
 
-            AddError(current, $"Лишний фрагмент: '{current.Lexeme}'. Ожидалось {GetDesc(expectedCode)}");
+            AddError(current, $"Лишний элемент '{current.Lexeme}'. Ожидалось {GetDesc(expectedCode)}");
             _index++;
-
             return ProcessStep(expectedCode);
         }
 
@@ -79,14 +114,14 @@ namespace WinFormsApp4
         {
             return code switch
             {
-                1 => "Ключевое слово 'const'",
-                2 => "Идентификатор (NAME)",
-                5 => "Разделитель ':'",
-                3 => "Тип данных '&str'",
-                6 => "Оператор '='",
-                7 => "Строковое значение BodyString",
-                8 => "Завершающая ';'",
-                _ => "неизвестный элемент"
+                1 => "const",
+                2 => "Идентификатор/Текст",
+                5 => "':'",
+                3 => "'&str'",
+                6 => "'='",
+                7 => "'\"'",
+                8 => "';'",
+                _ => "элемент"
             };
         }
 
@@ -94,7 +129,7 @@ namespace WinFormsApp4
         {
             SyntaxErrors.Add(new Token
             {
-                Lexeme = t?.Lexeme ?? "EOF",
+                Lexeme = t?.Lexeme ?? " ",
                 Line = t?.Line ?? (_tokens.LastOrDefault()?.Line ?? 1),
                 StartPos = t?.StartPos ?? 0,
                 EndPos = t?.EndPos ?? 0,

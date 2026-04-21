@@ -36,7 +36,6 @@ namespace WinFormsApp4
                 if (ch == '\n') { line++; lineStart = i + 1; i++; continue; }
                 if (ch == '\r') { i++; continue; }
 
-
                 if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_')
                 {
                     string word = "";
@@ -71,28 +70,7 @@ namespace WinFormsApp4
                 if (ch == ':') { AddSimpleToken(tokens, 5, "Разделитель типа", ":", line, i - lineStart); i++; continue; }
                 if (ch == '=') { AddSimpleToken(tokens, 6, "Оператор присваивания", "=", line, i - lineStart); i++; continue; }
                 if (ch == ';') { AddSimpleToken(tokens, 8, "Оператор конца строки", ";", line, i - lineStart); i++; continue; }
-
-                if (ch == '"')
-                {
-                    string lit = "\"";
-                    i++;
-                    while (i < input.Length && input[i] != '"' && input[i] != '\n')
-                    {
-                        lit += input[i];
-                        i++;
-                    }
-                    if (i < input.Length && input[i] == '"')
-                    {
-                        lit += "\"";
-                        i++;
-                        tokens.Add(new Token { Code = 7, Type = "Инициализатор строки", Lexeme = lit, Line = line, StartPos = startI - lineStart, EndPos = i - lineStart });
-                    }
-                    else
-                    {
-                        tokens.Add(new Token { Code = 99, Type = "INVALID_TOKEN (Незакрытая строка)", Lexeme = lit, Line = line, StartPos = startI - lineStart, EndPos = i - lineStart });
-                    }
-                    continue;
-                }
+                if (ch == '"') { AddSimpleToken(tokens, 7, "Кавычка", "\"", line, i - lineStart); i++; continue; }
 
                 tokens.Add(new Token { Code = 99, Type = "INVALID_TOKEN (Запрещенный символ)", Lexeme = ch.ToString(), Line = line, StartPos = i - lineStart, EndPos = i - lineStart + 1 });
                 i++;

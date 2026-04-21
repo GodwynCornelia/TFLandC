@@ -42,6 +42,12 @@
             dataGridViewTextBoxColumn12 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn13 = new DataGridViewTextBoxColumn();
             lblErrCount = new Label();
+            tabPage3 = new TabPage();
+            dgvSemanticErrors = new DataGridView();
+            semColMessage = new DataGridViewTextBoxColumn();
+            semColLocation = new DataGridViewTextBoxColumn();
+            tabPage4 = new TabPage();
+            rtbAstTree = new RichTextBox();
             menuStrip1 = new MenuStrip();
             файлToolStripMenuItem = new ToolStripMenuItem();
             создатьToolStripMenuItem = new ToolStripMenuItem();
@@ -86,12 +92,16 @@
             dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
+            показатьASTToolStripMenuItem = new ToolStripMenuItem();
             tabControl1 = new TabControl();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvErrors).BeginInit();
+            tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvSemanticErrors).BeginInit();
+            tabPage4.SuspendLayout();
             menuStrip1.SuspendLayout();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -105,6 +115,8 @@
             tabControl1.AccessibleName = "";
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
+            tabControl1.Controls.Add(tabPage3);
+            tabControl1.Controls.Add(tabPage4);
             tabControl1.Dock = DockStyle.Fill;
             tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
@@ -221,9 +233,71 @@
             lblErrCount.Text = "Ошибок не обнаружено";
             lblErrCount.TextAlign = ContentAlignment.MiddleLeft;
             // 
+            // tabPage3
+            // 
+            tabPage3.Controls.Add(dgvSemanticErrors);
+            tabPage3.Location = new Point(4, 24);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Padding = new Padding(3);
+            tabPage3.Size = new Size(792, 202);
+            tabPage3.TabIndex = 2;
+            tabPage3.Text = "Семантический анализатор";
+            tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // dgvSemanticErrors
+            // 
+            dgvSemanticErrors.AllowUserToAddRows = false;
+            dgvSemanticErrors.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvSemanticErrors.BackgroundColor = Color.White;
+            dgvSemanticErrors.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvSemanticErrors.Columns.AddRange(new DataGridViewColumn[] { semColMessage, semColLocation });
+            dgvSemanticErrors.Dock = DockStyle.Fill;
+            dgvSemanticErrors.Location = new Point(3, 3);
+            dgvSemanticErrors.Name = "dgvSemanticErrors";
+            dgvSemanticErrors.ReadOnly = true;
+            dgvSemanticErrors.RowHeadersVisible = false;
+            dgvSemanticErrors.Size = new Size(786, 196);
+            dgvSemanticErrors.TabIndex = 0;
+            // 
+            // semColMessage
+            // 
+            semColMessage.HeaderText = "Сообщение об ошибке";
+            semColMessage.Name = "semColMessage";
+            semColMessage.ReadOnly = true;
+            // 
+            // semColLocation
+            // 
+            semColLocation.HeaderText = "Местоположение";
+            semColLocation.Name = "semColLocation";
+            semColLocation.ReadOnly = true;
+            // 
+            // tabPage4
+            // 
+            tabPage4.Controls.Add(rtbAstTree);
+            tabPage4.Location = new Point(4, 24);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Padding = new Padding(3);
+            tabPage4.Size = new Size(792, 202);
+            tabPage4.TabIndex = 3;
+            tabPage4.Text = "AST";
+            tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // rtbAstTree
+            // 
+            rtbAstTree.BackColor = Color.White;
+            rtbAstTree.BorderStyle = BorderStyle.None;
+            rtbAstTree.Dock = DockStyle.Fill;
+            rtbAstTree.Font = new Font("Consolas", 10F);
+            rtbAstTree.Location = new Point(3, 3);
+            rtbAstTree.Name = "rtbAstTree";
+            rtbAstTree.ReadOnly = true;
+            rtbAstTree.Size = new Size(786, 196);
+            rtbAstTree.TabIndex = 0;
+            rtbAstTree.Text = "";
+            // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { файлToolStripMenuItem, правкаToolStripMenuItem, текстToolStripMenuItem, пускToolStripMenuItem, справкаToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { файлToolStripMenuItem, правкаToolStripMenuItem, текстToolStripMenuItem, пускToolStripMenuItem, справкаToolStripMenuItem, показатьASTToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(800, 24);
@@ -592,6 +666,13 @@
             dataGridViewTextBoxColumn3.HeaderText = "Описание ошибки";
             dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             // 
+            // показатьASTToolStripMenuItem
+            // 
+            показатьASTToolStripMenuItem.Name = "показатьASTToolStripMenuItem";
+            показатьASTToolStripMenuItem.Size = new Size(92, 20);
+            показатьASTToolStripMenuItem.Text = "Показать AST";
+            показатьASTToolStripMenuItem.Click += показатьASTToolStripMenuItem_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -610,6 +691,9 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvErrors).EndInit();
+            tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvSemanticErrors).EndInit();
+            tabPage4.ResumeLayout(false);
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             toolStrip1.ResumeLayout(false);
@@ -681,5 +765,12 @@
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn11;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn12;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn13;
+        private TabPage tabPage3;
+        private TabPage tabPage4;
+        private System.Windows.Forms.DataGridView dgvSemanticErrors;
+        private System.Windows.Forms.RichTextBox rtbAstTree;
+        private System.Windows.Forms.DataGridViewTextBoxColumn semColMessage;
+        private System.Windows.Forms.DataGridViewTextBoxColumn semColLocation;
+        private ToolStripMenuItem показатьASTToolStripMenuItem;
     }
 }
