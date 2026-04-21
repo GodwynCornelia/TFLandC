@@ -19,7 +19,7 @@ namespace WinFormsApp4
         private HashSet<string> _declaredConstants = new HashSet<string>();
         public List<SemanticError> Errors { get; private set; } = new List<SemanticError>();
 
-        public void Analyze(List<EnumDeclNode> nodes)
+        public void Analyze(List<ConstDeclStr> nodes)
         {
             Errors.Clear();
             _declaredConstants.Clear();

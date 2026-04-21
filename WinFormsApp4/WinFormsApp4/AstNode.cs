@@ -11,16 +11,16 @@ namespace WinFormsApp4
         public int Position { get; set; }
     }
 
-    public class EnumDeclNode : AstNode
+    public class ConstDeclStr : AstNode
     {
-        public List<EnumCaseNode> Cases { get; set; } = new List<EnumCaseNode>();
+        public List<ConstDeclStr> Cases { get; set; } = new List<ConstDeclStr>();
     }
 
     public class EnumCaseNode : AstNode { }
 
     public class AstVisualizer
     {
-        public string GenerateTreeText(List<EnumDeclNode> nodes)
+        public string GenerateTreeText(List<ConstDeclStr> nodes)
         {
             if (nodes == null || nodes.Count == 0)
                 return "AST дерево пусто.";

@@ -17,15 +17,15 @@ namespace WinFormsApp4
             _tokens = tokens.Where(t => t.Code != 4).ToList();
         }
 
-        public List<EnumDeclNode> Parse()
+        public List<ConstDeclStr> Parse()
         {
             SyntaxErrors.Clear();
             _index = 0;
-            var astNodes = new List<EnumDeclNode>();
+            var astNodes = new List<ConstDeclStr>();
 
             while (_index < _tokens.Count)
             {
-                EnumDeclNode currentNode = new EnumDeclNode();
+                ConstDeclStr currentNode = new ConstDeclStr();
                 bool isValidLine = true;
 
                 foreach (int expectedCode in _sequence)
@@ -62,7 +62,7 @@ namespace WinFormsApp4
             return astNodes;
         }
 
-        private void FillAstData(EnumDeclNode node, Token t, int code)
+        private void FillAstData(ConstDeclStr node, Token t, int code)
         {
             if (code == 1) { node.Line = t.Line; node.Position = t.StartPos; }
             if (code == 2 && node.Name == null)
@@ -73,7 +73,7 @@ namespace WinFormsApp4
             if (code == 2 && node.Name != null)
             {
                 if (node.Cases.Count == 0)
-                    node.Cases.Add(new EnumCaseNode { Name = t.Lexeme });
+                    node.Cases.Add(new ConstDeclStr { Name = t.Lexeme });
             }
         }
 

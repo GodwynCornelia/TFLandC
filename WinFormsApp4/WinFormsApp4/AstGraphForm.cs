@@ -8,12 +8,12 @@ namespace WinFormsApp4
 {
     public partial class AstGraphForm : Form
     {
-        private List<EnumDeclNode> _nodes;
+        private List<ConstDeclStr> _nodes;
 
         private const int nodeWidth = 130;
         private const int nodeHeight = 40;
 
-        public AstGraphForm(List<EnumDeclNode> nodes)
+        public AstGraphForm(List<ConstDeclStr> nodes)
         {
             this.Text = "Визуализация AST Дерева";
             this.Size = new Size(1200, 800);
@@ -39,7 +39,7 @@ namespace WinFormsApp4
             }
         }
 
-        private void DrawFullTree(Graphics g, EnumDeclNode root, int x, int y)
+        private void DrawFullTree(Graphics g, ConstDeclStr root, int x, int y)
         {
             int levelHeight = 90;
             int branchWidth = 150;

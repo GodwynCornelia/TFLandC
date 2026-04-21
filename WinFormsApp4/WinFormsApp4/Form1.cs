@@ -187,7 +187,7 @@ namespace WinFormsApp4
                 }
 
                 Parser parser = new Parser(tokens);
-                List<EnumDeclNode> allNodes = parser.Parse();
+                List<ConstDeclStr> allNodes = parser.Parse();
 
                 foreach (var err in parser.SyntaxErrors)
                 {
@@ -207,7 +207,7 @@ namespace WinFormsApp4
                     dgvSemanticErrors.Rows.Add(sErr.Message, $"Стр:{sErr.Line}, Поз:{sErr.Position}");
                 }
 
-                List<EnumDeclNode> nodesToDraw = new List<EnumDeclNode>();
+                List<ConstDeclStr> nodesToDraw = new List<ConstDeclStr>();
                 HashSet<string> seenNames = new HashSet<string>();
 
                 foreach (var node in allNodes)
@@ -341,9 +341,9 @@ namespace WinFormsApp4
             Scanner scanner = new Scanner();
             List<Token> tokens = scanner.Analyze(richTextBox1.Text);
             Parser parser = new Parser(tokens);
-            List<EnumDeclNode> allNodes = parser.Parse();
+            List<ConstDeclStr> allNodes = parser.Parse();
 
-            List<EnumDeclNode> validNodes = new List<EnumDeclNode>();
+            List<ConstDeclStr> validNodes = new List<ConstDeclStr>();
             HashSet<string> seenNames = new HashSet<string>();
             foreach (var node in allNodes)
             {
