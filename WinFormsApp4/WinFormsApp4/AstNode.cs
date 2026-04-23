@@ -34,9 +34,9 @@ namespace WinFormsApp4
                 sb.AppendLine($"├── type: StrType");
                 sb.AppendLine($"│   └── name: \"&str\"");
 
-                string value = node.Cases.Count > 0 ? node.Cases[0].Name : "null";
+                string value = (node.Cases.Count > 0) ? $"\"{node.Cases[0].Name}\"" : "\"\"";
                 sb.AppendLine($"└── str: BodyString");
-                sb.AppendLine($"    └── str: \"{value}\"");
+                sb.AppendLine($"    └── str: {value}");
             }
             return sb.ToString();
         }

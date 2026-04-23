@@ -26,38 +26,46 @@ namespace WinFormsApp4
             while (_index < _tokens.Count)
             {
                 ConstDeclStr currentNode = new ConstDeclStr();
-                bool isValidLine = true;
+                bool constructionStarted = false;
+                bool hasSeriousErrors = false;
 
                 foreach (int expectedCode in _sequence)
                 {
+                    if (_index < _tokens.Count && _tokens[_index].Code == 1)
+                        constructionStarted = true;
+
                     if (_index >= _tokens.Count)
                     {
                         if (expectedCode != 1)
+                        {
                             AddError(null, $"Ожидалось {GetDesc(expectedCode)}, но достигнут конец файла");
-                        isValidLine = false;
+                            hasSeriousErrors = true;
+                        }
                         continue;
                     }
 
                     int oldIndex = _index;
-                    bool matched = ProcessStep(expectedCode);
-
-                    if (matched)
+                    if (ProcessStep(expectedCode))
                     {
-                        Token matchedToken = _tokens[oldIndex];
-                        FillAstData(currentNode, matchedToken, expectedCode);
+                        if (oldIndex < _index)
+                        {
+                            FillAstData(currentNode, _tokens[oldIndex], expectedCode);
+                        }
                     }
                     else
                     {
-                        isValidLine = false;
+                        hasSeriousErrors = true;
                         if (_index < _tokens.Count && _tokens[_index].Code == 1 && expectedCode != 1)
                             break;
                     }
                 }
 
-                if (isValidLine && !string.IsNullOrEmpty(currentNode.Name))
+                if (constructionStarted && !string.IsNullOrEmpty(currentNode.Name) && !hasSeriousErrors)
                 {
                     astNodes.Add(currentNode);
                 }
+
+                if (!constructionStarted && _index >= _tokens.Count) break;
             }
             return astNodes;
         }
@@ -65,15 +73,15 @@ namespace WinFormsApp4
         private void FillAstData(ConstDeclStr node, Token t, int code)
         {
             if (code == 1) { node.Line = t.Line; node.Position = t.StartPos; }
+
             if (code == 2 && node.Name == null)
             {
                 node.Name = t.Lexeme;
-                return;
             }
-            if (code == 2 && node.Name != null)
+            else if ((code == 2 || code == 7) && node.Name != null && node.Cases.Count == 0)
             {
-                if (node.Cases.Count == 0)
-                    node.Cases.Add(new ConstDeclStr { Name = t.Lexeme });
+                string val = (code == 7) ? "" : t.Lexeme;
+                node.Cases.Add(new ConstDeclStr { Name = val, Line = t.Line, Position = t.StartPos });
             }
         }
 
@@ -85,6 +93,11 @@ namespace WinFormsApp4
             if (current.Code == expectedCode)
             {
                 _index++;
+                return true;
+            }
+
+            if (expectedCode == 2 && current.Code == 7)
+            {
                 return true;
             }
 
@@ -103,6 +116,10 @@ namespace WinFormsApp4
         {
             int startIdx = Array.IndexOf(_sequence, expectedCode);
             if (startIdx == -1) return false;
+
+            if (expectedCode == 3 && currentCode == 2) return false;
+            if (expectedCode == 2 && currentCode == 7) return false;
+
             for (int i = startIdx + 1; i < _sequence.Length; i++)
             {
                 if (_sequence[i] == currentCode) return true;
@@ -115,11 +132,11 @@ namespace WinFormsApp4
             return code switch
             {
                 1 => "const",
-                2 => "Идентификатор/Текст",
+                2 => "Имя или Текст",
                 5 => "':'",
                 3 => "'&str'",
                 6 => "'='",
-                7 => "'\"'",
+                7 => "кавычка '\"'",
                 8 => "';'",
                 _ => "элемент"
             };

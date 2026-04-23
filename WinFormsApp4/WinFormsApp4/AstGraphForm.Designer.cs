@@ -37,7 +37,6 @@
             ClientSize = new Size(800, 450);
             Name = "AstGraphForm";
             Text = "AstGraphForm";
-            Load += AstGraphForm_Load;
             ResumeLayout(false);
         }
 
