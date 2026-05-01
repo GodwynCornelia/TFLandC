@@ -15,33 +15,9 @@ namespace WinFormsApp4
 
         private void Form3_Load(object sender, EventArgs e)
         {
-            richTextBox1.ReadOnly = true;
-            richTextBox1.DetectUrls = true;
 
-
-            richTextBox1.Text = "Статус проекта: В разработке..." + Environment.NewLine +
-                                "Документация README: https://github.com/GodwynCornelia/TFLandC/blob/main/README.md";//в последующем будет нормальная реализация
-
-
-            richTextBox1.LinkClicked -= richTextBox1_LinkClicked;
-            richTextBox1.LinkClicked += richTextBox1_LinkClicked;
         }
 
-        private void richTextBox1_LinkClicked(object sender, LinkClickedEventArgs e)
-        {
-            try
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = e.LinkText,
-                    UseShellExecute = true
-                });
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Ошибка при открытии ссылки: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -53,6 +29,11 @@ namespace WinFormsApp4
         }
 
         private void Form3_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
         {
 
         }

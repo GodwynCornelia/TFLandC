@@ -406,7 +406,7 @@ namespace WinFormsApp4
         }
 
         private void классификацияГрамматикиToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {   
+        {
             var info = new InfoForm("Классификация грамматики", "Classification.html");
             info.ShowDialog();
 
@@ -434,6 +434,15 @@ namespace WinFormsApp4
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
             {
                 FileName = "https://github.com/GodwynCornelia/TFLandC/blob/main/README.md",
+                UseShellExecute = true
+            });
+        }
+
+        private void курсоваяToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "https://drive.google.com/drive/folders/1DGAQGDIRg6xW0Fnx5SR1nrCys1bkKyw3?hl=ru",
                 UseShellExecute = true
             });
         }

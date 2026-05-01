@@ -27,6 +27,7 @@ namespace WinFormsApp4
                 int startI = i;
                 char ch = input[i];
 
+                // Пропуски
                 if (ch == ' ' || ch == '\t')
                 {
                     tokens.Add(new Token { Code = 4, Type = "Пробел", Lexeme = ch.ToString(), Line = line, StartPos = i - lineStart, EndPos = i - lineStart + 1 });
@@ -35,6 +36,7 @@ namespace WinFormsApp4
                 if (ch == '\n') { line++; lineStart = i + 1; i++; continue; }
                 if (ch == '\r') { i++; continue; }
 
+                // Обработка &str (лексер пытается найти правильный тип)
                 if (ch == '&')
                 {
                     if (i + 3 < input.Length && input.Substring(i, 4) == "&str")
@@ -44,32 +46,54 @@ namespace WinFormsApp4
                     }
                     else
                     {
+                        // Если просто '&' или опечатка, помечаем как ошибку (код 99)
                         tokens.Add(new Token { Code = 99, Type = "Ошибка", Lexeme = "&", Line = line, StartPos = i - lineStart, EndPos = i - lineStart + 1 });
                         i++;
                     }
                     continue;
                 }
 
+                // Обработка слов (const, Имена) + склеивание внутренней кавычки
                 if (char.IsLetter(ch) || ch == '_' || char.IsDigit(ch))
                 {
                     string word = "";
-                    while (i < input.Length && (char.IsLetterOrDigit(input[i]) || input[i] == '_'))
+                    bool hasInternalQuote = false;
+
+                    while (i < input.Length)
                     {
-                        word += input[i];
-                        i++;
+                        char current = input[i];
+
+                        if (char.IsLetterOrDigit(current) || current == '_')
+                        {
+                            word += current;
+                            i++;
+                        }
+                        // Склеиваем, если кавычка ВНУТРИ слова (за ней идет буква/цифра)
+                        else if (current == '"' && i + 1 < input.Length && char.IsLetterOrDigit(input[i + 1]))
+                        {
+                            word += current;
+                            hasInternalQuote = true;
+                            i++;
+                        }
+                        else break;
                     }
-                    if (word == "const")
+
+                    if (hasInternalQuote)
+                        tokens.Add(new Token { Code = 99, Type = "Ошибка", Lexeme = word, Line = line, StartPos = startI - lineStart, EndPos = i - lineStart });
+                    else if (word == "const")
                         tokens.Add(new Token { Code = 1, Type = "Ключевое слово", Lexeme = word, Line = line, StartPos = startI - lineStart, EndPos = i - lineStart });
                     else
                         tokens.Add(new Token { Code = 2, Type = "Идентификатор/Текст", Lexeme = word, Line = line, StartPos = startI - lineStart, EndPos = i - lineStart });
                     continue;
                 }
 
+                // Символы
                 if (ch == ':') { AddSimpleToken(tokens, 5, "Разделитель", ":", line, i - lineStart); i++; continue; }
                 if (ch == '=') { AddSimpleToken(tokens, 6, "Оператор", "=", line, i - lineStart); i++; continue; }
                 if (ch == ';') { AddSimpleToken(tokens, 8, "Конец строки", ";", line, i - lineStart); i++; continue; }
                 if (ch == '"') { AddSimpleToken(tokens, 7, "Кавычка", "\"", line, i - lineStart); i++; continue; }
 
+                // Неизвестный символ
                 tokens.Add(new Token { Code = 99, Type = "Ошибка", Lexeme = ch.ToString(), Line = line, StartPos = i - lineStart, EndPos = i - lineStart + 1 });
                 i++;
             }

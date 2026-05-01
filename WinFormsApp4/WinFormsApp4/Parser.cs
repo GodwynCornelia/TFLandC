@@ -22,30 +22,23 @@ namespace WinFormsApp4
             SyntaxErrors.Clear();
             _index = 0;
 
-            while (_index < _tokens.Count)
+            foreach (int expectedCode in _sequence)
             {
-                bool constructionStarted = false;
-
-                foreach (int expectedCode in _sequence)
+                if (_index >= _tokens.Count)
                 {
-                    if (_index < _tokens.Count && _tokens[_index].Code == 1)
-                        constructionStarted = true;
-
-                    if (_index >= _tokens.Count)
-                    {
-                        if (expectedCode != 1)
-                            AddError(null, $"Ожидалось {GetDesc(expectedCode)}, но достигнут конец файла");
-                        continue;
-                    }
-
-                    if (!ProcessStep(expectedCode))
-                    {
-                        if (_index < _tokens.Count && _tokens[_index].Code == 1 && expectedCode != 1)
-                            break;
-                    }
+                    AddError(null, $"Ожидалось {GetDesc(expectedCode)}, но строка закончилась");
+                    continue;
                 }
 
-                if (!constructionStarted && _index >= _tokens.Count) break;
+                ProcessStep(expectedCode);
+                if (expectedCode == 8) break; // Завершаем разбор после ';'
+            }
+
+            // Обработка лишних хвостов после ';'
+            while (_index < _tokens.Count)
+            {
+                AddError(_tokens[_index], $"Лишний элемент '{_tokens[_index].Lexeme}' после завершения конструкции");
+                _index++;
             }
         }
 
@@ -54,41 +47,43 @@ namespace WinFormsApp4
             if (_index >= _tokens.Count) return false;
             Token current = _tokens[_index];
 
+            // 1. Идеальное совпадение
             if (current.Code == expectedCode)
             {
                 _index++;
                 return true;
             }
 
-            if (expectedCode == 2 && current.Code == 7)
+            // 2. Обработка слов с лишней кавычкой внутри (склеенных лексером)
+            if (current.Code == 99 && current.Lexeme.Contains("\""))
             {
-                return true;
+                bool isLikelyTarget = false;
+                if (expectedCode == 1 && current.Lexeme.Contains("const")) isLikelyTarget = true;
+                if (expectedCode == 2) isLikelyTarget = true;
+                if (expectedCode == 3 && (current.Lexeme.Contains("str") || current.Lexeme.Contains("&"))) isLikelyTarget = true;
+
+                if (isLikelyTarget)
+                {
+                    AddError(current, $"Найден лишний символ '\"' в токене ");
+                    _index++;
+                    return true;
+                }
             }
 
-            if (IsFutureAnchor(current.Code, expectedCode))
+            // 3. Спец-кейсы (пустая строка)
+            if (expectedCode == 2 && current.Code == 7) return true;
+
+            // 4. Жадная проверка (пропуск лишнего символа)
+            if (_index + 1 < _tokens.Count && _tokens[_index + 1].Code == expectedCode)
             {
-                AddError(current, $"Пропущено {GetDesc(expectedCode)}");
-                return false;
+                AddError(current, $"Лишний элемент '{current.Lexeme}'. Ожидалось {GetDesc(expectedCode)}");
+                _index++;
+                return ProcessStep(expectedCode);
             }
-            AddError(current, $"Лишний элемент '{current.Lexeme}'. Ожидалось {GetDesc(expectedCode)}");
+
+            // 5. Дефолтная ошибка
+            AddError(current, $"Неверный элемент '{current.Lexeme}'. Ожидалось {GetDesc(expectedCode)}");
             _index++;
-
-            return ProcessStep(expectedCode);
-        }
-
-        private bool IsFutureAnchor(int currentCode, int expectedCode)
-        {
-            int startIdx = Array.IndexOf(_sequence, expectedCode);
-            if (startIdx == -1) return false;
-
-            if (expectedCode == 3 && currentCode == 2) return false;
-
-            if (expectedCode == 2 && currentCode == 7) return false;
-
-            for (int i = startIdx + 1; i < _sequence.Length; i++)
-            {
-                if (_sequence[i] == currentCode) return true;
-            }
             return false;
         }
 

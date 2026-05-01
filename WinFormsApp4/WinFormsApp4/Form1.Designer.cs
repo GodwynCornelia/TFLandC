@@ -86,6 +86,7 @@
             dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
+            курсоваяToolStripMenuItem = new ToolStripMenuItem();
             tabControl1 = new TabControl();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -331,7 +332,7 @@
             // 
             // текстToolStripMenuItem
             // 
-            текстToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { постановкаЗадачиToolStripMenuItem, грамматикаToolStripMenuItem, классификацияГрамматикиToolStripMenuItem, методАнализаToolStripMenuItem, тестовыйПримерToolStripMenuItem, списокЛитераторыToolStripMenuItem, исходныйКодлToolStripMenuItem });
+            текстToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { постановкаЗадачиToolStripMenuItem, грамматикаToolStripMenuItem, классификацияГрамматикиToolStripMenuItem, методАнализаToolStripMenuItem, тестовыйПримерToolStripMenuItem, списокЛитераторыToolStripMenuItem, исходныйКодлToolStripMenuItem, курсоваяToolStripMenuItem });
             текстToolStripMenuItem.Name = "текстToolStripMenuItem";
             текстToolStripMenuItem.Size = new Size(48, 20);
             текстToolStripMenuItem.Text = "Текст";
@@ -592,6 +593,13 @@
             dataGridViewTextBoxColumn3.HeaderText = "Описание ошибки";
             dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             // 
+            // курсоваяToolStripMenuItem
+            // 
+            курсоваяToolStripMenuItem.Name = "курсоваяToolStripMenuItem";
+            курсоваяToolStripMenuItem.Size = new Size(231, 22);
+            курсоваяToolStripMenuItem.Text = "Курсовая";
+            курсоваяToolStripMenuItem.Click += курсоваяToolStripMenuItem_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -681,5 +689,6 @@
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn11;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn12;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn13;
+        private ToolStripMenuItem курсоваяToolStripMenuItem;
     }
 }
