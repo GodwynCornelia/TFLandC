@@ -348,3 +348,18 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 
 ### Диаграмма лексера:
 ![](READMEpicture/сканер_6лаба.png)
+
+### Схема рекурсивного спуска:
+![](READMEpicture/парсер_6лб.png)
+
+### Примеры отработки лесера и парсера:
+![](READMEpicture/6лб_лекс.png)
+![](READMEpicture/6лб_синтакс.png)
+
+### Примеры тетрад:
+![](READMEpicture/тетрады_тест1.png)
+![](READMEpicture/тетрады_тест2.png)
+
+### Примеры ПОЛИЗ:
+![](READMEpicture/ПОЛИЗ_тест1.png)
+![](READMEpicture/ПОЛИЗ_тест2.png)
