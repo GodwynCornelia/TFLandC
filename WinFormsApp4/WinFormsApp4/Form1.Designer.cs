@@ -60,17 +60,21 @@
             btnPaste = new ToolStripButton();
             toolStripSeparator2 = new ToolStripSeparator();
             btnRun = new ToolStripButton();
-            comboRegexSelection = new ToolStripComboBox();
             btnHelp = new ToolStripButton();
             btnAbout = new ToolStripButton();
             statusStrip1 = new StatusStrip();
             lblStatusPath = new ToolStripStatusLabel();
             splitContainer1 = new SplitContainer();
             richTextBox1 = new RichTextBox();
+            tabControl1 = new TabControl();
+            tabPage1 = new TabPage();
             dataGridView1 = new DataGridView();
             colSubstring = new DataGridViewTextBoxColumn();
             colPosition = new DataGridViewTextBoxColumn();
+            Column1 = new DataGridViewTextBoxColumn();
             colLength = new DataGridViewTextBoxColumn();
+            tabPage2 = new TabPage();
+            richTextBoxPoliz = new TextBox();
             menuStrip1.SuspendLayout();
             toolStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
@@ -78,7 +82,10 @@
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            tabControl1.SuspendLayout();
+            tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            tabPage2.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -292,7 +299,7 @@
             // toolStrip1
             // 
             toolStrip1.ImageScalingSize = new Size(32, 32);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { btnNew, btnOpen, btnSave, toolStripSeparator1, btnUndo, btnRedo, btnCopy, btnCut, btnPaste, toolStripSeparator2, btnRun, comboRegexSelection, btnHelp, btnAbout });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { btnNew, btnOpen, btnSave, toolStripSeparator1, btnUndo, btnRedo, btnCopy, btnCut, btnPaste, toolStripSeparator2, btnRun, btnHelp, btnAbout });
             toolStrip1.Location = new Point(0, 24);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(900, 39);
@@ -380,14 +387,6 @@
             btnRun.Size = new Size(36, 36);
             btnRun.Click += пускToolStripMenuItem_Click;
             // 
-            // comboRegexSelection
-            // 
-            comboRegexSelection.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboRegexSelection.Items.AddRange(new object[] { "Задача 1: Формат имени файла", "Задача 2: Поиск слов >4 символов с подстрокой \"чай\"", "Задача 3: Адрес IPv4 (адрес+маска+порт)" });
-            comboRegexSelection.Name = "comboRegexSelection";
-            comboRegexSelection.Size = new Size(250, 39);
-            comboRegexSelection.Click += comboRegexSelection_Click;
-            // 
             // btnHelp
             // 
             btnHelp.Alignment = ToolStripItemAlignment.Right;
@@ -433,7 +432,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(dataGridView1);
+            splitContainer1.Panel2.Controls.Add(tabControl1);
             splitContainer1.Size = new Size(900, 375);
             splitContainer1.SplitterDistance = 200;
             splitContainer1.TabIndex = 4;
@@ -448,39 +447,90 @@
             richTextBox1.Text = "";
             richTextBox1.TextChanged += richTextBox1_TextChanged;
             // 
+            // tabControl1
+            // 
+            tabControl1.Controls.Add(tabPage1);
+            tabControl1.Controls.Add(tabPage2);
+            tabControl1.Dock = DockStyle.Fill;
+            tabControl1.Location = new Point(0, 0);
+            tabControl1.Name = "tabControl1";
+            tabControl1.SelectedIndex = 0;
+            tabControl1.Size = new Size(900, 171);
+            tabControl1.TabIndex = 0;
+            tabControl1.Tag = "";
+            // 
+            // tabPage1
+            // 
+            tabPage1.Controls.Add(dataGridView1);
+            tabPage1.Location = new Point(4, 24);
+            tabPage1.Name = "tabPage1";
+            tabPage1.Padding = new Padding(3);
+            tabPage1.Size = new Size(892, 143);
+            tabPage1.TabIndex = 0;
+            tabPage1.Text = "Тетрады";
+            tabPage1.UseVisualStyleBackColor = true;
+            // 
             // dataGridView1
             // 
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colSubstring, colPosition, colLength });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colSubstring, colPosition, Column1, colLength });
             dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 0);
+            dataGridView1.Location = new Point(3, 3);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(900, 171);
+            dataGridView1.Size = new Size(886, 137);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellClick += dataGridView1_CellClick;
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             // 
             // colSubstring
             // 
-            colSubstring.HeaderText = "Найденная подстрока";
+            colSubstring.HeaderText = "op";
             colSubstring.Name = "colSubstring";
             colSubstring.ReadOnly = true;
             // 
             // colPosition
             // 
-            colPosition.HeaderText = "Начальная позиция";
+            colPosition.HeaderText = "arg1";
             colPosition.Name = "colPosition";
             colPosition.ReadOnly = true;
             // 
+            // Column1
+            // 
+            Column1.HeaderText = "arg2";
+            Column1.Name = "Column1";
+            Column1.ReadOnly = true;
+            // 
             // colLength
             // 
-            colLength.HeaderText = "Длина";
+            colLength.HeaderText = "res";
             colLength.Name = "colLength";
             colLength.ReadOnly = true;
+            // 
+            // tabPage2
+            // 
+            tabPage2.Controls.Add(richTextBoxPoliz);
+            tabPage2.Location = new Point(4, 24);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(892, 143);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "ПОЛИЗ";
+            tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // richTextBoxPoliz
+            // 
+            richTextBoxPoliz.Dock = DockStyle.Fill;
+            richTextBoxPoliz.Location = new Point(3, 3);
+            richTextBoxPoliz.Multiline = true;
+            richTextBoxPoliz.Name = "richTextBoxPoliz";
+            richTextBoxPoliz.ReadOnly = true;
+            richTextBoxPoliz.Size = new Size(886, 137);
+            richTextBoxPoliz.TabIndex = 0;
             // 
             // Form1
             // 
@@ -505,7 +555,11 @@
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            tabControl1.ResumeLayout(false);
+            tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            tabPage2.ResumeLayout(false);
+            tabPage2.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -545,7 +599,6 @@
         private ToolStripButton btnPaste;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripButton btnRun;
-        private ToolStripComboBox comboRegexSelection;
         private ToolStripButton btnHelp;
         private ToolStripButton btnAbout;
         private StatusStrip statusStrip1;
@@ -553,9 +606,6 @@
         private SplitContainer splitContainer1;
         private RichTextBox richTextBox1;
         private DataGridView dataGridView1;
-        private DataGridViewTextBoxColumn colSubstring;
-        private DataGridViewTextBoxColumn colPosition;
-        private DataGridViewTextBoxColumn colLength;
         private ToolStripMenuItem вызовСправкиToolStripMenuItem1;
         private ToolStripMenuItem оПрограммеToolStripMenuItem1;
         private ToolStripMenuItem постановкаЗадачиToolStripMenuItem1;
@@ -565,5 +615,13 @@
         private ToolStripMenuItem тестовыйПримерToolStripMenuItem;
         private ToolStripMenuItem списокЛитературыToolStripMenuItem;
         private ToolStripMenuItem исходныйКодПрограммыToolStripMenuItem;
+        private TabControl tabControl1;
+        private TabPage tabPage1;
+        private TabPage tabPage2;
+        private TextBox richTextBoxPoliz;
+        private DataGridViewTextBoxColumn colSubstring;
+        private DataGridViewTextBoxColumn colPosition;
+        private DataGridViewTextBoxColumn Column1;
+        private DataGridViewTextBoxColumn colLength;
     }
 }

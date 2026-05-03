@@ -164,142 +164,53 @@ namespace WinFormsApp4
         private void выделитьВсToolStripMenuItem_Click(object sender, EventArgs e) => richTextBox1.SelectAll();
 
 
-        private bool IsTeaAutomatonMatch(string word)
-        {
-            if (string.IsNullOrEmpty(word) || word.Length < 5) return false;
 
-            int state = 0;
-            string lowerWord = word.ToLower();
-
-            foreach (char c in lowerWord)
-            {
-                switch (state)
-                {
-                    case 0: 
-                        if (c == 'ч') state = 1;
-                        else state = 10;
-                        break;
-
-                    case 1: if (c == 'а') state = 2; else state = 5; break;
-                    case 2: if (c == 'й') state = 3; else state = 5; break;
-                    case 3: state = 4; break;
-                    case 4: state = 100; break;
-
-                    case 5: if (c == 'ч') state = 6; else state = 11; break;
-                    case 6: if (c == 'а') state = 7; else state = 11; break;
-                    case 7: if (c == 'й') state = 8; else state = 11; break;
-                    case 8: state = 100; break;
-
-                    case 10:
-                        if (c == 'ч') state = 12;
-                        else state = 11;
-                        break;
-
-                    case 11:
-                        if (c == 'ч') state = 12;
-                        else state = 11;
-                        break;
-
-                    case 12:
-                        if (c == 'а') state = 13;
-                        else if (c == 'ч') state = 12; 
-                        else state = 11; 
-                        break;
-
-                    case 13:
-                        if (c == 'й') state = 100; 
-                        else if (c == 'ч') state = 12;
-                        else state = 11;
-                        break;
-
-                    case 100:
-                        state = 100;
-                        break;
-                }
-            }
-
-            return state == 100;
-        }
         #region Поиск подстрок
         private void пускToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (comboRegexSelection.SelectedIndex == -1)
+            if (!richTextBox1.Visible || string.IsNullOrWhiteSpace(richTextBox1.Text))
             {
-                MessageBox.Show("Пожалуйста, выберите задачу!", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Нечего анализировать. Создайте файл и введите выражение.", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             dataGridView1.Rows.Clear();
-            string text = richTextBox1.Text;
-
-            if (comboRegexSelection.SelectedIndex == 1)
-            {
-                string[] allWords = text.Split(new char[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                int count = 0;
-                int lastFoundIndex = 0;
-
-                foreach (string w in allWords)
-                {
-                    string cleanWord = w.Trim(new char[] { '.', ',', '!', '?', ':', ';', '(', ')' });
-
-                    if (IsTeaAutomatonMatch(cleanWord))
-                    {
-                        int index = text.IndexOf(w, lastFoundIndex);
-                        if (index != -1)
-                        {
-                            dataGridView1.Rows.Add(cleanWord, index, cleanWord.Length);
-                            lastFoundIndex = index + w.Length;
-                            count++;
-                        }
-                    }
-                }
-
-                if (count == 0)
-                {
-                    MessageBox.Show("Совпадений не найдено.", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    int rowIndex = dataGridView1.Rows.Add("Общее количество (Автомат):", count.ToString(), "");
-                    dataGridView1.Rows[rowIndex].DefaultCellStyle.BackColor = Color.LightGreen;
-                }
-                return;
-            }
-
-            string pattern = "";
-            switch (comboRegexSelection.SelectedIndex)
-            {
-                case 0: pattern = @"\b[\w\-]+\.(?:doc|docx|pdf|jpg|jpeg|png|gif)\b"; break;
-                case 2: pattern = @"\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/(?:[0-9]|[1-2][0-9]|3[0-2])(?::\d+)?\b"; break;
-            }
+            richTextBoxPoliz.Clear();
+            lblStatusPath.Text = "Статус: Анализ...";
 
             try
             {
-                MatchCollection matches = Regex.Matches(text, pattern, RegexOptions.IgnoreCase);
-                if (matches.Count == 0)
+                LabHandler handler = new LabHandler(richTextBox1.Text);
+
+                handler.ParseE();
+
+                if (handler.HasMoreTokens())
+                    throw new Exception($"Лишний токен после выражения: '{handler.Peek()}'");
+
+                foreach (var t in handler.Tetrads)
                 {
-                    MessageBox.Show("Совпадений не найдено.");
-                    return;
+                    dataGridView1.Rows.Add(t[0], t[1], t[2], t[3]);
                 }
 
-                foreach (Match match in matches)
-                {
-                    dataGridView1.Rows.Add(match.Value, match.Index, match.Length);
-                }
+                richTextBoxPoliz.Text = string.Join(" ", handler.Poliz);
 
-                int totalRow = dataGridView1.Rows.Add("Общее количество:", matches.Count.ToString(), "");
-                dataGridView1.Rows[totalRow].DefaultCellStyle.BackColor = Color.LightGreen;
+                double result = handler.EvaluatePoliz();
+                lblStatusPath.Text = $"Результат: {result}";
+
+                
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message}");
+                lblStatusPath.Text = "Статус: Ошибка синтаксиса";
+                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка анализа", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         #endregion
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridView1.Rows.Count - 1) 
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridView1.Rows.Count - 1)
             {
                 if (int.TryParse(dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString(), out int start) &&
                     int.TryParse(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString(), out int length))
@@ -434,6 +345,11 @@ namespace WinFormsApp4
         }
 
         private void comboRegexSelection_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
