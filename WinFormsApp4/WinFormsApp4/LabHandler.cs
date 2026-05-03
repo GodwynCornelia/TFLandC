@@ -1,28 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WinFormsApp4
 {
-    public enum TokenType { NUMBER, ID, OP, LPAREN, RPAREN, EOF }
-
-    public struct Token
+    public enum TokenType
     {
-        public TokenType Type;
-        public string Value;
+        NUMBER, ID,
+        PLUS, MINUS, MULT, DIV, MOD,
+        LPAREN, RPAREN,
+        EOF
+    }
+
+    public class Token
+    {
+        public TokenType Type { get; set; }
+        public string Value { get; set; }
     }
 
     public class LabHandler
     {
-        private List<Token> tokens = new List<Token>();
-        private int index = 0;
-        private int tempCount = 0;
+        private List<Token> tokens;
+        private int index;
+        private int tempCount = 1;
 
-        public List<string[]> Tetrads { get; } = new List<string[]>();
-        public List<string> Poliz { get; } = new List<string>();
+        public List<string[]> Tetrads { get; private set; } = new List<string[]>();
+        public List<string> Poliz { get; private set; } = new List<string>();
 
         public LabHandler(string input)
         {
             tokens = Lex(input);
+            index = 0;
+            tempCount = 1;
+            Tetrads.Clear();
+            Poliz.Clear();
         }
 
         private List<Token> Lex(string input)
@@ -46,11 +57,11 @@ namespace WinFormsApp4
                     while (i < input.Length && (char.IsLetterOrDigit(input[i]) || input[i] == '_')) id += input[i++];
                     result.Add(new Token { Type = TokenType.ID, Value = id });
                 }
-                else if ("+-*/%".Contains(c))
-                {
-                    result.Add(new Token { Type = TokenType.OP, Value = c.ToString() });
-                    i++;
-                }
+                else if (c == '+') { result.Add(new Token { Type = TokenType.PLUS, Value = "+" }); i++; }
+                else if (c == '-') { result.Add(new Token { Type = TokenType.MINUS, Value = "-" }); i++; }
+                else if (c == '*') { result.Add(new Token { Type = TokenType.MULT, Value = "*" }); i++; }
+                else if (c == '/') { result.Add(new Token { Type = TokenType.DIV, Value = "/" }); i++; }
+                else if (c == '%') { result.Add(new Token { Type = TokenType.MOD, Value = "%" }); i++; }
                 else if (c == '(') { result.Add(new Token { Type = TokenType.LPAREN, Value = "(" }); i++; }
                 else if (c == ')') { result.Add(new Token { Type = TokenType.RPAREN, Value = ")" }); i++; }
                 else throw new Exception($"Лексическая ошибка: Недопустимый символ '{c}'");
@@ -58,11 +69,6 @@ namespace WinFormsApp4
             result.Add(new Token { Type = TokenType.EOF, Value = "" });
             return result;
         }
-
-        public Token Peek() => index < tokens.Count ? tokens[index] : tokens[tokens.Count - 1];
-        public Token Read() => index < tokens.Count ? tokens[index++] : tokens[tokens.Count - 1];
-        public bool HasMoreTokens() => Peek().Type != TokenType.EOF;
-        private string GetTemp() => $"T{++tempCount}";
 
         public string ParseE()
         {
@@ -73,7 +79,7 @@ namespace WinFormsApp4
         private string ParseA(string left)
         {
             Token t = Peek();
-            if (t.Type == TokenType.OP && (t.Value == "+" || t.Value == "-"))
+            if (t.Type == TokenType.PLUS || t.Type == TokenType.MINUS)
             {
                 Read();
                 string right = ParseT();
@@ -94,7 +100,7 @@ namespace WinFormsApp4
         private string ParseB(string left)
         {
             Token t = Peek();
-            if (t.Type == TokenType.OP && (t.Value == "*" || t.Value == "/" || t.Value == "%"))
+            if (t.Type == TokenType.MULT || t.Type == TokenType.DIV || t.Type == TokenType.MOD)
             {
                 Read();
                 string right = ParseF();
@@ -108,50 +114,61 @@ namespace WinFormsApp4
 
         private string ParseF()
         {
-            Token t = Read();
-
-            if (t.Type == TokenType.LPAREN)
-            {
-                string res = ParseE();
-                if (Read().Type != TokenType.RPAREN) throw new Exception("Синтаксическая ошибка: Ожидалась закрывающая скобка ')'");
-                return res;
-            }
-
+            Token t = Peek();
             if (t.Type == TokenType.NUMBER || t.Type == TokenType.ID)
             {
+                Read();
                 Poliz.Add(t.Value);
                 return t.Value;
             }
-
-            if (t.Type == TokenType.EOF) throw new Exception("Синтаксическая ошибка: Неожиданный конец выражения");
-
-            throw new Exception($"Синтаксическая ошибка: Ожидался операнд, но найден '{t.Value}'");
+            else if (t.Type == TokenType.LPAREN)
+            {
+                Read();
+                string res = ParseE();
+                if (Peek().Type != TokenType.RPAREN)
+                    throw new Exception("Синтаксическая ошибка: Ожидалась закрывающая скобка ')'");
+                Read();
+                return res;
+            }
+            throw new Exception($"Синтаксическая ошибка: Ожидался операнд или '(', но встречено '{t.Value}'");
         }
 
         public double EvaluatePoliz()
         {
             Stack<double> stack = new Stack<double>();
-            foreach (string val in Poliz)
+            foreach (var item in Poliz)
             {
-                if (double.TryParse(val, out double num)) stack.Push(num);
+                if (double.TryParse(item, out double num))
+                {
+                    stack.Push(num);
+                }
                 else
                 {
-                    if (stack.Count < 2) throw new Exception("Ошибка при вычислении: Недостаточно операндов");
+                    if (stack.Count < 2) continue;
                     double b = stack.Pop();
                     double a = stack.Pop();
-                    switch (val)
+                    switch (item)
                     {
                         case "+": stack.Push(a + b); break;
                         case "-": stack.Push(a - b); break;
                         case "*": stack.Push(a * b); break;
                         case "/":
-                            if (b == 0) throw new Exception("Ошибка времени выполнения: Деление на ноль");
-                            stack.Push(a / b); break;
+                            if (b == 0) throw new Exception("Ошибка: Деление на ноль.");
+                            stack.Push(a / b);
+                            break;
                         case "%": stack.Push(a % b); break;
                     }
                 }
             }
             return stack.Count > 0 ? stack.Pop() : 0;
         }
+
+        public bool HasMoreTokens() => index < tokens.Count && tokens[index].Type != TokenType.EOF;
+
+        private Token Read() => tokens[index++];
+
+        public Token Peek() => index < tokens.Count ? tokens[index] : tokens[tokens.Count - 1];
+
+        private string GetTemp() => "T" + (tempCount++);
     }
 }
