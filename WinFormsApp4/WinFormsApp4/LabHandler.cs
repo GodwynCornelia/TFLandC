@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 
 namespace WinFormsApp4
 {
+    public enum TokenType { NUMBER, ID, OP, LPAREN, RPAREN, EOF }
+
+    public struct Token
+    {
+        public TokenType Type;
+        public string Value;
+    }
+
     public class LabHandler
     {
-        private List<string> tokens = new List<string>();
+        private List<Token> tokens = new List<Token>();
         private int index = 0;
         private int tempCount = 0;
 
@@ -16,25 +22,46 @@ namespace WinFormsApp4
 
         public LabHandler(string input)
         {
-            Tokenize(input);
+            tokens = Lex(input);
         }
 
-        private void Tokenize(string input)
+        private List<Token> Lex(string input)
         {
-            string pattern = input.Replace("+", " + ")
-                                  .Replace("-", " - ")
-                                  .Replace("*", " * ")
-                                  .Replace("/", " / ")
-                                  .Replace("%", " % ")
-                                  .Replace("(", " ( ")
-                                  .Replace(")", " ) ");
+            var result = new List<Token>();
+            int i = 0;
+            while (i < input.Length)
+            {
+                char c = input[i];
+                if (char.IsWhiteSpace(c)) { i++; continue; }
 
-            tokens = pattern.Split(new[] { ' ', '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                if (char.IsDigit(c))
+                {
+                    string num = "";
+                    while (i < input.Length && char.IsDigit(input[i])) num += input[i++];
+                    result.Add(new Token { Type = TokenType.NUMBER, Value = num });
+                }
+                else if (char.IsLetter(c))
+                {
+                    string id = "";
+                    while (i < input.Length && (char.IsLetterOrDigit(input[i]) || input[i] == '_')) id += input[i++];
+                    result.Add(new Token { Type = TokenType.ID, Value = id });
+                }
+                else if ("+-*/%".Contains(c))
+                {
+                    result.Add(new Token { Type = TokenType.OP, Value = c.ToString() });
+                    i++;
+                }
+                else if (c == '(') { result.Add(new Token { Type = TokenType.LPAREN, Value = "(" }); i++; }
+                else if (c == ')') { result.Add(new Token { Type = TokenType.RPAREN, Value = ")" }); i++; }
+                else throw new Exception($"Лексическая ошибка: Недопустимый символ '{c}'");
+            }
+            result.Add(new Token { Type = TokenType.EOF, Value = "" });
+            return result;
         }
 
-        public string Peek() => index < tokens.Count ? tokens[index] : "";
-        private string Read() => index < tokens.Count ? tokens[index++] : "";
-        public bool HasMoreTokens() => index < tokens.Count;
+        public Token Peek() => index < tokens.Count ? tokens[index] : tokens[tokens.Count - 1];
+        public Token Read() => index < tokens.Count ? tokens[index++] : tokens[tokens.Count - 1];
+        public bool HasMoreTokens() => Peek().Type != TokenType.EOF;
         private string GetTemp() => $"T{++tempCount}";
 
         public string ParseE()
@@ -45,33 +72,35 @@ namespace WinFormsApp4
 
         private string ParseA(string left)
         {
-            string op = Peek();
-            if (op == "+" || op == "-")
+            Token t = Peek();
+            if (t.Type == TokenType.OP && (t.Value == "+" || t.Value == "-"))
             {
                 Read();
                 string right = ParseT();
                 string res = GetTemp();
-                Tetrads.Add(new[] { op, left, right, res });
-                Poliz.Add(op);
+                Tetrads.Add(new[] { t.Value, left, right, res });
+                Poliz.Add(t.Value);
                 return ParseA(res);
             }
             return left;
         }
+
         private string ParseT()
         {
             string left = ParseF();
             return ParseB(left);
         }
+
         private string ParseB(string left)
         {
-            string op = Peek();
-            if (op == "*" || op == "/" || op == "%")
+            Token t = Peek();
+            if (t.Type == TokenType.OP && (t.Value == "*" || t.Value == "/" || t.Value == "%"))
             {
                 Read();
                 string right = ParseF();
                 string res = GetTemp();
-                Tetrads.Add(new[] { op, left, right, res });
-                Poliz.Add(op);
+                Tetrads.Add(new[] { t.Value, left, right, res });
+                Poliz.Add(t.Value);
                 return ParseB(res);
             }
             return left;
@@ -79,42 +108,44 @@ namespace WinFormsApp4
 
         private string ParseF()
         {
-            string current = Read();
+            Token t = Read();
 
-            if (string.IsNullOrEmpty(current))
-                throw new Exception("Неожиданный конец выражения.");
-
-            if (current == "(")
+            if (t.Type == TokenType.LPAREN)
             {
                 string res = ParseE();
-                if (Read() != ")") throw new Exception("Ожидалась закрывающая скобка ')'.");
+                if (Read().Type != TokenType.RPAREN) throw new Exception("Синтаксическая ошибка: Ожидалась закрывающая скобка ')'");
                 return res;
             }
-            if ("+-*/%".Contains(current))
-                throw new Exception($"Ожидался операнд, но найден оператор '{current}'.");
 
-            Poliz.Add(current);
-            return current;
+            if (t.Type == TokenType.NUMBER || t.Type == TokenType.ID)
+            {
+                Poliz.Add(t.Value);
+                return t.Value;
+            }
+
+            if (t.Type == TokenType.EOF) throw new Exception("Синтаксическая ошибка: Неожиданный конец выражения");
+
+            throw new Exception($"Синтаксическая ошибка: Ожидался операнд, но найден '{t.Value}'");
         }
 
         public double EvaluatePoliz()
         {
             Stack<double> stack = new Stack<double>();
-            foreach (string token in Poliz)
+            foreach (string val in Poliz)
             {
-                if (double.TryParse(token, out double number)) stack.Push(number);
+                if (double.TryParse(val, out double num)) stack.Push(num);
                 else
                 {
-                    if (stack.Count < 2) throw new Exception("Ошибка стека при вычислении ПОЛИЗ.");
+                    if (stack.Count < 2) throw new Exception("Ошибка при вычислении: Недостаточно операндов");
                     double b = stack.Pop();
                     double a = stack.Pop();
-                    switch (token)
+                    switch (val)
                     {
                         case "+": stack.Push(a + b); break;
                         case "-": stack.Push(a - b); break;
                         case "*": stack.Push(a * b); break;
                         case "/":
-                            if (b == 0) throw new Exception("Деление на ноль.");
+                            if (b == 0) throw new Exception("Ошибка времени выполнения: Деление на ноль");
                             stack.Push(a / b); break;
                         case "%": stack.Push(a % b); break;
                     }

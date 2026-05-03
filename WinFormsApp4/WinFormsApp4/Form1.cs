@@ -170,39 +170,34 @@ namespace WinFormsApp4
         {
             if (!richTextBox1.Visible || string.IsNullOrWhiteSpace(richTextBox1.Text))
             {
-                MessageBox.Show("Нечего анализировать. Создайте файл и введите выражение.", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Пожалуйста, введите текст для анализа.", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             dataGridView1.Rows.Clear();
             richTextBoxPoliz.Clear();
-            lblStatusPath.Text = "Статус: Анализ...";
+            lblStatusPath.Text = "Статус: Выполнение...";
 
             try
             {
                 LabHandler handler = new LabHandler(richTextBox1.Text);
 
                 handler.ParseE();
-
                 if (handler.HasMoreTokens())
-                    throw new Exception($"Лишний токен после выражения: '{handler.Peek()}'");
+                    throw new Exception($"Лишний токен после конца выражения: '{handler.Peek().Value}'");
 
-                foreach (var t in handler.Tetrads)
+                foreach (var tetrad in handler.Tetrads)
                 {
-                    dataGridView1.Rows.Add(t[0], t[1], t[2], t[3]);
+                    dataGridView1.Rows.Add(tetrad[0], tetrad[1], tetrad[2], tetrad[3]);
                 }
-
                 richTextBoxPoliz.Text = string.Join(" ", handler.Poliz);
-
                 double result = handler.EvaluatePoliz();
                 lblStatusPath.Text = $"Результат: {result}";
-
-                
             }
             catch (Exception ex)
             {
-                lblStatusPath.Text = "Статус: Ошибка синтаксиса";
-                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка анализа", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                lblStatusPath.Text = "Статус: Ошибка";
+                MessageBox.Show(ex.Message, "Ошибка анализа", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
