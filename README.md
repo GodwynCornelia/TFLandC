@@ -350,7 +350,7 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 ![](READMEpicture/лексер6лб.png)
 
 ### Схема рекурсивного спуска:
-![](READMEpicture/парсер_6лб.png)
+![](READMEpicture/парсерлб6.png)
 
 ### Примеры отработки лесера и парсера:
 ![](READMEpicture/6лб_лекс.png)
