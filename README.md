@@ -341,3 +341,7 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 * id → letter {letter | digit | _}
 * num → digit {digit}
 
+### Примеры верных строк:
+1. `10 + 20 + 30`
+2. `100 / 10 % 3`
+3. `2 * (100 - (50 + 20))`
