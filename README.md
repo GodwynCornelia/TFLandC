@@ -345,3 +345,6 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 1. `10 + 20 + 30`
 2. `100 / 10 % 3`
 3. `2 * (100 - (50 + 20))`
+
+### Диаграмма лексера:
+![](READMEpicture/сканер_6лаба.png)
