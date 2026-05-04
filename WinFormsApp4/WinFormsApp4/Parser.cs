@@ -22,19 +22,22 @@ namespace WinFormsApp4
             SyntaxErrors.Clear();
             _index = 0;
 
-            foreach (int expectedCode in _sequence)
+            for (int i = 0; i < _sequence.Length; i++)
             {
+                int expectedCode = _sequence[i];
+
                 if (_index >= _tokens.Count)
                 {
                     AddError(null, $"Ожидалось {GetDesc(expectedCode)}, но строка закончилась");
                     continue;
                 }
 
-                ProcessStep(expectedCode);
-                if (expectedCode == 8) break; // Завершаем разбор после ';'
+                int nextExpectedCode = (i + 1 < _sequence.Length) ? _sequence[i + 1] : -1;
+                ProcessStep(expectedCode, nextExpectedCode);
+
+                if (expectedCode == 8) break;
             }
 
-            // Обработка лишних хвостов после ';'
             while (_index < _tokens.Count)
             {
                 AddError(_tokens[_index], $"Лишний элемент '{_tokens[_index].Lexeme}' после завершения конструкции");
@@ -42,49 +45,62 @@ namespace WinFormsApp4
             }
         }
 
-        private bool ProcessStep(int expectedCode)
+        private void ProcessStep(int expectedCode, int nextExpectedCode)
         {
-            if (_index >= _tokens.Count) return false;
+            if (_index >= _tokens.Count) return;
             Token current = _tokens[_index];
 
-            // 1. Идеальное совпадение
             if (current.Code == expectedCode)
             {
                 _index++;
-                return true;
+                return;
             }
 
-            // 2. Обработка слов с лишней кавычкой внутри (склеенных лексером)
+            if (expectedCode == 1)
+            {
+                AddError(current, $"Неверное начало конструкции. Ожидалось 'const', но найдено '{current.Lexeme}'");
+                _index++;
+                return;
+            }
+
             if (current.Code == 99 && current.Lexeme.Contains("\""))
             {
-                bool isLikelyTarget = false;
-                if (expectedCode == 1 && current.Lexeme.Contains("const")) isLikelyTarget = true;
-                if (expectedCode == 2) isLikelyTarget = true;
-                if (expectedCode == 3 && (current.Lexeme.Contains("str") || current.Lexeme.Contains("&"))) isLikelyTarget = true;
+                AddError(current, $"Найден лишний символ '\"' в токене '{current.Lexeme}'");
+                _index++;
+                return;
+            }
 
-                if (isLikelyTarget)
+            if (current.Code == nextExpectedCode)
+            {
+                AddError(current, $"Отсутствует символ {GetDesc(expectedCode)}");
+                return;
+            }
+
+            if (expectedCode == 7)
+            {
+                if (current.Code == 2)
                 {
-                    AddError(current, $"Найден лишний символ '\"' в токене ");
-                    _index++;
-                    return true;
+                    AddError(current, "Отсутствует открывающая кавычка '\"' перед значением");
+                    return;
+                }
+                if (current.Code == 8)
+                {
+                    AddError(current, "Отсутствует закрывающая кавычка '\"'");
+                    return;
                 }
             }
 
-            // 3. Спец-кейсы (пустая строка)
-            if (expectedCode == 2 && current.Code == 7) return true;
+            if (expectedCode == 2 && current.Code == 7) return;
 
-            // 4. Жадная проверка (пропуск лишнего символа)
             if (_index + 1 < _tokens.Count && _tokens[_index + 1].Code == expectedCode)
             {
                 AddError(current, $"Лишний элемент '{current.Lexeme}'. Ожидалось {GetDesc(expectedCode)}");
                 _index++;
-                return ProcessStep(expectedCode);
+                ProcessStep(expectedCode, nextExpectedCode);
+                return;
             }
-
-            // 5. Дефолтная ошибка
             AddError(current, $"Неверный элемент '{current.Lexeme}'. Ожидалось {GetDesc(expectedCode)}");
             _index++;
-            return false;
         }
 
         private string GetDesc(int code)
