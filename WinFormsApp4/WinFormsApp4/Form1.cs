@@ -180,23 +180,18 @@ namespace WinFormsApp4
 
             try
             {
-                // Теперь передаем текст в конструктор, как и просит ошибка CS1729
                 LabHandler handler = new LabHandler(richTextBox1.Text);
 
-                // Вызываем ParseE (теперь он public)
                 handler.ParseE();
 
-                // Проверяем наличие лишних токенов
                 if (handler.HasMoreTokens())
                     throw new Exception($"Лишний токен после конца выражения: '{handler.Peek().Value}'");
 
-                // Заполняем таблицу тетрад
                 foreach (var tetrad in handler.Tetrads)
                 {
                     dataGridView1.Rows.Add(tetrad[0], tetrad[1], tetrad[2], tetrad[3]);
                 }
 
-                // Выводим ПОЛИЗ и считаем результат
                 richTextBoxPoliz.Text = string.Join(" ", handler.Poliz);
                 double result = handler.EvaluatePoliz();
                 lblStatusPath.Text = $"Результат: {result}";
