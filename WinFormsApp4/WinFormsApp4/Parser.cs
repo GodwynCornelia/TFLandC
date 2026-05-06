@@ -6,7 +6,7 @@ namespace WinFormsApp4
 {
     public class Parser
     {
-        private List<Token> _tokens;
+        private readonly List<Token> _tokens;
         private int _index = 0;
         public List<Token> SyntaxErrors { get; } = new List<Token>();
 
@@ -36,9 +36,23 @@ namespace WinFormsApp4
 
                 Token current = _tokens[_index];
 
-                if (current.Code == expected)
+                if (current.Code == 2 && current.Lexeme.Contains("\""))
+                {
+                    AddError(current, $"Найден лишний символ '\"' в токене '{current.Lexeme}'");
+                    _index++;
+                    if (expected == 2) seqIdx++;
+                    continue;
+                }
+
+                if (current.Code == expected || (expected == 2 && current.Code == 1))
                 {
                     _index++;
+                    seqIdx++;
+                    continue;
+                }
+
+                if (expected == 2 && seqIdx == 6 && current.Code == 7)
+                {
                     seqIdx++;
                     continue;
                 }
@@ -61,6 +75,7 @@ namespace WinFormsApp4
 
                 AddError(current, $"Лишний символ '{current.Lexeme}'");
                 _index++;
+
                 if (_index < _tokens.Count && _tokens[_index].Code == 2 && expected != 2)
                 {
                     _index++;
@@ -69,31 +84,36 @@ namespace WinFormsApp4
 
             while (_index < _tokens.Count)
             {
-                AddError(_tokens[_index], $"Лишний фрагмент '{_tokens[_index].Lexeme}' после программы");
+                AddError(_tokens[_index], $"Лишний фрагмент '{_tokens[_index].Lexeme}' после завершения конструкции");
                 _index++;
             }
         }
 
-        private string GetDesc(int code) => code switch
+        private string GetDesc(int code)
         {
-            1 => "'const'",
-            2 => "Имя/Значение",
-            3 => "'&str'",
-            5 => "':'",
-            6 => "'='",
-            7 => "кавычка '\"'",
-            8 => "';'",
-            _ => "элемент"
-        };
+            return code switch
+            {
+                1 => "ключевое слово 'const'",
+                2 => "идентификатор или текст",
+                3 => "тип данных '&str'",
+                5 => "разделитель ':'",
+                6 => "оператор '='",
+                7 => "кавычка '\"'",
+                8 => "конец строки ';'",
+                _ => "элемент"
+            };
+        }
 
         private void AddError(Token t, string message)
         {
             SyntaxErrors.Add(new Token
             {
                 Lexeme = t?.Lexeme ?? " ",
-                Line = t?.Line ?? 1,
+                Line = t?.Line ?? (_tokens.LastOrDefault()?.Line ?? 1),
                 StartPos = t?.StartPos ?? 0,
-                Type = message
+                EndPos = t?.EndPos ?? 0,
+                Type = message,
+                Code = 99
             });
         }
     }
