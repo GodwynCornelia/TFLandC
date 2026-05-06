@@ -24,16 +24,17 @@ namespace WinFormsApp4
 
             while (i < input.Length)
             {
-                int startI = i;
                 char ch = input[i];
-
-                if (ch == ' ' || ch == '\t')
+                if (char.IsWhiteSpace(ch))
                 {
-                    tokens.Add(new Token { Code = 4, Type = "Пробел", Lexeme = ch.ToString(), Line = line, StartPos = i - lineStart, EndPos = i - lineStart + 1 });
+                    if (ch == '\n') { line++; lineStart = i + 1; }
+                    if (ch == ' ' || ch == '\t')
+                    {
+                        tokens.Add(new Token { Code = 4, Type = "Пробел", Lexeme = ch.ToString(), Line = line, StartPos = i - lineStart, EndPos = i - lineStart + 1 });
+                    }
                     i++; continue;
                 }
-                if (ch == '\n') { line++; lineStart = i + 1; i++; continue; }
-                if (ch == '\r') { i++; continue; }
+
                 if (ch == '&')
                 {
                     if (i + 3 < input.Length && input.Substring(i, 4) == "&str")
@@ -49,47 +50,31 @@ namespace WinFormsApp4
                     continue;
                 }
 
-                if (char.IsLetter(ch) || ch == '_' || char.IsDigit(ch) || (ch != ':' && ch != '=' && ch != ';' && ch != '"' && ch != '&'))
-                {
-                    string word = "";
-                    int wordStart = i;
-
-                    while (i < input.Length)
-                    {
-                        char current = input[i];
-
-                        if (char.IsLetterOrDigit(current) || current == '_')
-                        {
-                            word += current;
-                            i++;
-                        }
-                        else if (current == '"' && i + 1 < input.Length && char.IsLetterOrDigit(input[i + 1]))
-                        {
-                            word += current;
-                            i++;
-                        }
-                        else if (current != ':' && current != '=' && current != ';' && current != '"' && current != '&' && !char.IsWhiteSpace(current))
-                        {
-                            word += current;
-                            i++;
-                        }
-                        else break;
-                    }
-
-                    if (word.Contains("\""))
-                        tokens.Add(new Token { Code = 99, Type = "Ошибка", Lexeme = word, Line = line, StartPos = wordStart - lineStart, EndPos = i - lineStart });
-                    else if (word == "const")
-                        tokens.Add(new Token { Code = 1, Type = "Ключевое слово", Lexeme = word, Line = line, StartPos = wordStart - lineStart, EndPos = i - lineStart });
-                    else
-                        tokens.Add(new Token { Code = 2, Type = "Идентификатор/Текст", Lexeme = word, Line = line, StartPos = wordStart - lineStart, EndPos = i - lineStart });
-                    continue;
-                }
-
                 if (ch == ':') { AddSimpleToken(tokens, 5, "Разделитель", ":", line, i - lineStart); i++; continue; }
                 if (ch == '=') { AddSimpleToken(tokens, 6, "Оператор", "=", line, i - lineStart); i++; continue; }
                 if (ch == ';') { AddSimpleToken(tokens, 8, "Конец строки", ";", line, i - lineStart); i++; continue; }
                 if (ch == '"') { AddSimpleToken(tokens, 7, "Кавычка", "\"", line, i - lineStart); i++; continue; }
 
+                if (char.IsLetter(ch) || ch == '_' || char.IsDigit(ch))
+                {
+                    string word = "";
+                    int wordStart = i;
+
+                    while (i < input.Length && (char.IsLetterOrDigit(input[i]) || input[i] == '_'))
+                    {
+                        word += input[i];
+                        i++;
+                    }
+
+                    if (word == "const")
+                        tokens.Add(new Token { Code = 1, Type = "Ключевое слово", Lexeme = word, Line = line, StartPos = wordStart - lineStart, EndPos = i - lineStart });
+                    else
+                        tokens.Add(new Token { Code = 2, Type = "Идентификатор/Текст", Lexeme = word, Line = line, StartPos = wordStart - lineStart, EndPos = i - lineStart });
+
+                    continue;
+                }
+
+                tokens.Add(new Token { Code = 99, Type = "Неизвестный символ", Lexeme = ch.ToString(), Line = line, StartPos = i - lineStart, EndPos = i - lineStart + 1 });
                 i++;
             }
             return tokens;

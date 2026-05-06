@@ -6,7 +6,7 @@ namespace WinFormsApp4
 {
     public class Parser
     {
-        private readonly List<Token> _tokens;
+        private List<Token> _tokens;
         private int _index = 0;
         public List<Token> SyntaxErrors { get; } = new List<Token>();
 
@@ -21,113 +21,79 @@ namespace WinFormsApp4
         {
             SyntaxErrors.Clear();
             _index = 0;
+            int seqIdx = 0;
 
-            for (int i = 0; i < _sequence.Length; i++)
+            while (seqIdx < _sequence.Length)
             {
-                int expectedCode = _sequence[i];
+                int expected = _sequence[seqIdx];
 
                 if (_index >= _tokens.Count)
                 {
-                    AddError(null, $"Ожидалось {GetDesc(expectedCode)}, но строка закончилась");
+                    AddError(null, $"Ожидалось {GetDesc(expected)}, но строка закончилась");
+                    seqIdx++;
                     continue;
                 }
 
-                int nextExpectedCode = (i + 1 < _sequence.Length) ? _sequence[i + 1] : -1;
-                ProcessStep(expectedCode, nextExpectedCode);
+                Token current = _tokens[_index];
 
-                if (expectedCode == 8) break;
+                if (current.Code == expected)
+                {
+                    _index++;
+                    seqIdx++;
+                    continue;
+                }
+
+                if ((expected == 1 || expected == 3) && current.Code == 2)
+                {
+                    AddError(current, $"Неверное написание. Ожидалось {GetDesc(expected)}, найдено '{current.Lexeme}'");
+                    _index++;
+                    seqIdx++;
+                    continue;
+                }
+
+                int nextExpected = (seqIdx + 1 < _sequence.Length) ? _sequence[seqIdx + 1] : -1;
+                if (current.Code == nextExpected)
+                {
+                    AddError(current, $"Отсутствует обязательный символ {GetDesc(expected)}");
+                    seqIdx++;
+                    continue;
+                }
+
+                AddError(current, $"Лишний символ '{current.Lexeme}'");
+                _index++;
+                if (_index < _tokens.Count && _tokens[_index].Code == 2 && expected != 2)
+                {
+                    _index++;
+                }
             }
 
             while (_index < _tokens.Count)
             {
-                AddError(_tokens[_index], $"Лишний элемент '{_tokens[_index].Lexeme}' после завершения конструкции");
+                AddError(_tokens[_index], $"Лишний фрагмент '{_tokens[_index].Lexeme}' после программы");
                 _index++;
             }
         }
 
-        private void ProcessStep(int expectedCode, int nextExpectedCode)
+        private string GetDesc(int code) => code switch
         {
-            if (_index >= _tokens.Count) return;
-            Token current = _tokens[_index];
-
-            if (current.Code == expectedCode)
-            {
-                _index++;
-                return;
-            }
-
-            if (expectedCode == 1)
-            {
-                AddError(current, $"Неверное начало конструкции. Ожидалось 'const', но найдено '{current.Lexeme}'");
-                _index++;
-                return;
-            }
-
-            if (current.Code == 99 && current.Lexeme.Contains("\""))
-            {
-                AddError(current, $"Найден лишний символ '\"' в токене '{current.Lexeme}'");
-                _index++;
-                return;
-            }
-
-            if (current.Code == nextExpectedCode)
-            {
-                AddError(current, $"Отсутствует символ {GetDesc(expectedCode)}");
-                return;
-            }
-
-            if (expectedCode == 7)
-            {
-                if (current.Code == 2)
-                {
-                    AddError(current, "Отсутствует открывающая кавычка '\"' перед значением");
-                    return;
-                }
-                if (current.Code == 8)
-                {
-                    AddError(current, "Отсутствует закрывающая кавычка '\"'");
-                    return;
-                }
-            }
-
-            if (expectedCode == 2 && current.Code == 7) return;
-
-            if (_index + 1 < _tokens.Count && _tokens[_index + 1].Code == expectedCode)
-            {
-                AddError(current, $"Лишний элемент '{current.Lexeme}'. Ожидалось {GetDesc(expectedCode)}");
-                _index++;
-                ProcessStep(expectedCode, nextExpectedCode);
-                return;
-            }
-            AddError(current, $"Неверный элемент '{current.Lexeme}'. Ожидалось {GetDesc(expectedCode)}");
-            _index++;
-        }
-
-        private string GetDesc(int code)
-        {
-            return code switch
-            {
-                1 => "const",
-                2 => "Имя или Текст",
-                5 => "':'",
-                3 => "'&str'",
-                6 => "'='",
-                7 => "кавычка '\"'",
-                8 => "';'",
-                _ => "элемент"
-            };
-        }
+            1 => "'const'",
+            2 => "Имя/Значение",
+            3 => "'&str'",
+            5 => "':'",
+            6 => "'='",
+            7 => "кавычка '\"'",
+            8 => "';'",
+            _ => "элемент"
+        };
 
         private void AddError(Token t, string message)
         {
             SyntaxErrors.Add(new Token
             {
                 Lexeme = t?.Lexeme ?? " ",
-                Line = t?.Line ?? (_tokens.LastOrDefault()?.Line ?? 1),
+                Line = t?.Line ?? 1,
                 StartPos = t?.StartPos ?? 0,
-                EndPos = t?.EndPos ?? 0,
-                Type = message,
-                Code = 99
+                Type = message
             });
         }
     }
