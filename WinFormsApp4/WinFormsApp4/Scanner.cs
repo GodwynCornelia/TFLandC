@@ -23,6 +23,7 @@ namespace WinFormsApp4
             int lineStart = 0;
 
             bool afterEquals = false;
+            bool afterColon = false;
 
             while (i < input.Length)
             {
@@ -35,6 +36,7 @@ namespace WinFormsApp4
                         line++;
                         lineStart = i + 1;
                         afterEquals = false;
+                        afterColon = false;
                     }
                     if (ch == ' ' || ch == '\t')
                     {
@@ -45,6 +47,7 @@ namespace WinFormsApp4
 
                 if (ch == '"')
                 {
+                    // Сюда мы попадем, только если кавычка стоит отдельно (например, через пробел: const " NAME)
                     AddSimpleToken(tokens, 7, "Кавычка", "\"", line, i - lineStart);
                     i++;
 
@@ -65,7 +68,7 @@ namespace WinFormsApp4
                         lastQuoteIdx--;
                     }
 
-                    if (lastQuoteIdx >= i) 
+                    if (lastQuoteIdx >= i)
                     {
                         string textVal = input.Substring(i, lastQuoteIdx - i);
                         if (textVal.Length > 0)
@@ -89,7 +92,7 @@ namespace WinFormsApp4
 
                 if (ch == '=')
                 {
-                    afterEquals = true; 
+                    afterEquals = true;
                     AddSimpleToken(tokens, 6, "Оператор", "=", line, i - lineStart);
                     i++; continue;
                 }
@@ -97,6 +100,7 @@ namespace WinFormsApp4
                 if (ch == ';')
                 {
                     afterEquals = false;
+                    afterColon = false;
                     AddSimpleToken(tokens, 8, "Конец строки", ";", line, i - lineStart);
                     i++; continue;
                 }
@@ -108,6 +112,20 @@ namespace WinFormsApp4
                         tokens.Add(new Token { Code = 3, Type = "Тип данных", Lexeme = "&str", Line = line, StartPos = i - lineStart, EndPos = i - lineStart + 4 });
                         i += 4;
                     }
+                    else if (afterColon && !afterEquals)
+                    {
+                        string wrongWord = "&";
+                        int startPos = i;
+                        i++;
+
+                        while (i < input.Length && (char.IsLetterOrDigit(input[i]) || input[i] == '_'))
+                        {
+                            wrongWord += input[i];
+                            i++;
+                        }
+
+                        tokens.Add(new Token { Code = 2, Type = "Идентификатор (опечатка)", Lexeme = wrongWord, Line = line, StartPos = startPos - lineStart, EndPos = i - lineStart });
+                    }
                     else
                     {
                         tokens.Add(new Token { Code = 99, Type = "Ошибка", Lexeme = "&", Line = line, StartPos = i - lineStart, EndPos = i - lineStart + 1 });
@@ -116,23 +134,45 @@ namespace WinFormsApp4
                     continue;
                 }
 
-                if (ch == ':') { AddSimpleToken(tokens, 5, "Разделитель", ":", line, i - lineStart); i++; continue; }
+                if (ch == ':')
+                {
+                    afterColon = true;
+                    AddSimpleToken(tokens, 5, "Разделитель", ":", line, i - lineStart);
+                    i++; continue;
+                }
 
+                // --- МОДЕРНИЗИРОВАННЫЙ БЛОК ДЛЯ СЛОВ ---
                 if (char.IsLetter(ch) || ch == '_')
                 {
                     string word = "";
                     int wordStart = i;
 
-                    while (i < input.Length && (char.IsLetterOrDigit(input[i]) || input[i] == '_'))
+                    while (i < input.Length)
                     {
-                        word += input[i];
-                        i++;
+                        // Читаем обычные буквы/цифры
+                        if (char.IsLetterOrDigit(input[i]) || input[i] == '_')
+                        {
+                            word += input[i];
+                            i++;
+                        }
+                        // Если встретили кавычку ДО двоеточия — поглощаем её в это же слово,
+                        // чтобы не разрывать токен на части и не вызывать каскад ошибок
+                        else if (input[i] == '"' && !afterColon)
+                        {
+                            word += input[i];
+                            i++;
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
 
                     int code = (word == "const") ? 1 : 2;
                     tokens.Add(new Token { Code = code, Type = "Идентификатор", Lexeme = word, Line = line, StartPos = wordStart - lineStart, EndPos = i - lineStart });
                     continue;
                 }
+
                 tokens.Add(new Token { Code = 99, Type = "Неизвестный", Lexeme = ch.ToString(), Line = line, StartPos = i - lineStart, EndPos = i - lineStart + 1 });
                 i++;
             }

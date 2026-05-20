@@ -36,14 +36,16 @@ namespace WinFormsApp4
 
                 Token current = _tokens[_index];
 
+                // Проверка на кавычку идет первой, чтобы не проглатывать ошибки в NA"ME и con"st
                 if (current.Code == 2 && current.Lexeme.Contains("\""))
                 {
-                    AddError(current, $"Найден лишний символ '\"' в токене '{current.Lexeme}'");
+                    AddError(current, $"Найден лишний символ '\"'");
                     _index++;
                     if (expected == 2) seqIdx++;
                     continue;
                 }
 
+                // 1. Точное совпадение ожидаемого токена
                 if (current.Code == expected || (expected == 2 && current.Code == 1))
                 {
                     _index++;
@@ -51,12 +53,14 @@ namespace WinFormsApp4
                     continue;
                 }
 
+                // 2. Особый случай для пустой строки "" 
                 if (expected == 2 && seqIdx == 6 && current.Code == 7)
                 {
                     seqIdx++;
                     continue;
                 }
 
+                // 3. Обработка опечаток в ключевом слове const или типе данных &str
                 if ((expected == 1 || expected == 3) && current.Code == 2)
                 {
                     AddError(current, $"Неверное написание. Ожидалось {GetDesc(expected)}, найдено '{current.Lexeme}'");
@@ -65,6 +69,18 @@ namespace WinFormsApp4
                     continue;
                 }
 
+                // 4. УМНАЯ СИНХРОНИЗАЦИЯ: Обработка пропущенного двоеточия ':'
+                if (expected == 5)
+                {
+                    if (current.Lexeme.StartsWith("&") || (_index + 1 < _tokens.Count && _tokens[_index + 1].Code == 6))
+                    {
+                        AddError(current, "Отсутствует обязательный символ разделитель ':'");
+                        seqIdx++;
+                        continue;
+                    }
+                }
+
+                // 5. Стандартная проверка пропуска элемента
                 int nextExpected = (seqIdx + 1 < _sequence.Length) ? _sequence[seqIdx + 1] : -1;
                 if (current.Code == nextExpected)
                 {
@@ -73,6 +89,7 @@ namespace WinFormsApp4
                     continue;
                 }
 
+                // 6. Если символ лишний
                 AddError(current, $"Лишний символ '{current.Lexeme}'");
                 _index++;
 
